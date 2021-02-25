@@ -106,11 +106,14 @@
 
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
+        d3.select(viz).selectAll(".axis").remove();
 
         d3.selectAll(".step-marker")
-            .transition("dimension-plot")
+            .transition()
             .attr("x", d => scatterX(d.length))
             .attr("y", d => scatterY(heightAccessor(d)))
+            .attr("width", 7)
+            .attr("height", 7)
 
         // X Axis
         const xAxis = d3.axisBottom()
@@ -132,11 +135,12 @@
             .attr("transform", `translate(${padding}, 0)`)
             .call(yAxis);
     }
+
     $: if (scrollIndex === 1) {
             d3.select(viz).selectAll(".axis").remove();
 
             d3.selectAll(".step-marker")
-                .transition("geo-plot")
+                .transition()
                 .duration(1000)
                 .attr("x", d => geoX(d.longitude) - 3.5)
                 .attr("y", d => geoY(d.latitude) - 3.5)
@@ -144,12 +148,19 @@
                 .attr("height", 7)
         }
     
+    let totalHeight = 0;
     $: if (scrollIndex === 2) {
         d3.selectAll(".step-marker")
-            .transition("change-shape")
-                .duration(1000)
+            .transition()
+                .duration(1500)
                 .attr("width", d => heightScale(d.length))
                 .attr("height", d => heightScale(heightAccessor(d)))
+                .attr("x", width / 2 - 200)
+                .attr("y", (d, i) => {
+                    const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
+                    totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
+                    return stepY;
+                })
     }
 
 </script>
