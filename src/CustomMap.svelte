@@ -67,7 +67,7 @@
 
 <svelte:window on:resize={handleResize}/>
 
-<div style="opacity: {scrollIndex === 1 ? 1 : 0}" bind:this={container}>
+<div style="opacity: {scrollIndex >= 1 ? 1 : 0}" bind:this={container}>
 	{#if map}
 		<slot></slot>
 	{/if}

@@ -2,7 +2,7 @@
     import * as d3 from 'd3';
     import { onMount } from 'svelte';
     import scrollama from 'scrollama';
-    import "intersection-observer";
+    // import "intersection-observer";
 
     import { scroll } from './state';
     import BeeSwarm from './BeeSwarm.svelte';
@@ -14,6 +14,7 @@
     })
     let scrollIndex = 0;
     let scrollProgress = 0;
+    const scroller = scrollama();
 
     const getDataBounds = (data) => {
         return [
@@ -23,17 +24,13 @@
     }
 
     onMount(() => {
-
-        // instantiate the scrollama
-        const scroller = scrollama();
-
         // setup the instance, pass callback functions
         scroller
             .setup({
                 step: ".step",
                 offset: 0.9,
-                progress: true,
-                threshold: 4
+                progress: false,
+                // threshold: 4
             })
             .onStepProgress(({ element, index, progress }) => {
                 scrollProgress = progress;
@@ -44,13 +41,10 @@
             .onStepExit((response) => {
                 // { element, index, direction }
             });
-
-        // setup resize event
-        window.addEventListener("resize", scroller.resize);
-
     })
 
     $: scroll.update(current => {
+        scroller.resize();
         return {
             index: scrollIndex,
             progress: scrollProgress
@@ -60,10 +54,6 @@
 </script>
 
 <style>
-    .wrapper {
-        height: 300vh;
-    }
-
     figure {
         position: sticky;
         left: 0;
@@ -86,6 +76,7 @@
     }
 </style>
 
+<svelte:window on:resize={() => { scroller.resize() } }/>
 <section class="wrapper">
     <figure>
         {#await dataLoad}
@@ -97,8 +88,8 @@
     </figure>
 
     <article>
-        <div class="step">1</div>
-        <div class="step">2</div>
-        <div class="step">3</div>
+        {#each [1,2,3,4,5] as index (index)}
+            <div class="step">{index}</div>
+        {/each}
     </article>
 </section>

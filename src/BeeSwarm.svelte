@@ -1,7 +1,6 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
-    // import d3Tip from "d3-tip";
     import { coordinates, scroll } from './state.js';
 
     export let stepsData;
@@ -28,7 +27,8 @@
 
     const heightAccessor = d => +d.number_of_steps*(7.5 / 12);
     const totalLength = stepsData.map(d => parseInt(d.length)).filter(d => ! isNaN(d)).reduce((a, b) => a + b, 0);
-    // const totalStepsHeight = stepHeights.reduce((a, b) => a + b, 0);
+    const totalStepsHeight = usableChartData.map(d => heightAccessor(d)).reduce((a, b) => a + b, 0);
+
     // const everestHeight = 29032;
     const colorScale = d3.scaleLinear()
         .domain(d3.extent(usableChartData, d => heightAccessor(d) / +d.length))
@@ -65,6 +65,10 @@
         .domain(longitudeBounds)
         .range([0, width])
 
+    $: heightScale = d3.scaleLinear()
+        .domain([0, totalStepsHeight])
+        .range([0, height*.5])
+
     onMount(() => {
         d3.select(viz)
             // .attr("viewBox", [0, 0, width, height])
@@ -80,7 +84,7 @@
                         .attr("width", 7)
                         .style("opacity", 0.7)
                         .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .style("stroke-width", 0.5)
+                        .style("stroke-width", 0)
                         .style("stroke", "black")
                         .on("mouseover", (e, d) => {
                             // selectedImage = `images/${d.id}.jpg`;
@@ -104,7 +108,7 @@
         const svg = d3.select(viz);
 
         d3.selectAll(".step-marker")
-            .transition()
+            .transition("dimension-plot")
             .attr("x", d => scatterX(d.length))
             .attr("y", d => scatterY(heightAccessor(d)))
 
@@ -128,16 +132,25 @@
             .attr("transform", `translate(${padding}, 0)`)
             .call(yAxis);
     }
-
     $: if (scrollIndex === 1) {
             d3.select(viz).selectAll(".axis").remove();
 
             d3.selectAll(".step-marker")
-                .transition()
+                .transition("geo-plot")
                 .duration(1000)
                 .attr("x", d => geoX(d.longitude) - 3.5)
                 .attr("y", d => geoY(d.latitude) - 3.5)
+                .attr("width", 7)
+                .attr("height", 7)
         }
+    
+    $: if (scrollIndex === 2) {
+        d3.selectAll(".step-marker")
+            .transition("change-shape")
+                .duration(1000)
+                .attr("width", d => heightScale(d.length))
+                .attr("height", d => heightScale(heightAccessor(d)))
+    }
 
 </script>
 
