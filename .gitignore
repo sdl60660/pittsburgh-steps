@@ -1,0 +1,5 @@
+/node_modules/
+/public/build/
+/public/images/
+
+.DS_Store

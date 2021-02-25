@@ -1,0 +1,18 @@
+Steep:
+
+Id: 1025433108
+Picture: https://tools.wprdc.org/images/pittsburgh/steps/Oporto_St_from_Roscoe_St_to_Baldauf_St.jpg
+
+Id: 778711269
+Picture: https://tools.wprdc.org/images/pittsburgh/steps/Mackey_St_to_Lawn_St.jpg
+
+
+
+Very unsteep:
+
+Id: 870567808
+Picture: https://tools.wprdc.org/images/pittsburgh/steps/Uvilla_St_from_Marlow_St_to_Comstock_Way.jpg
+
+
+Id: 41759992
+Picture: https://tools.wprdc.org/images/pittsburgh/steps/W_Sycamore_St._From_Red_Oak_Way_to_Bigham_St..jpg
