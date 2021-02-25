@@ -3,3 +3,5 @@
 /public/images/
 
 .DS_Store
+
+.vercel
