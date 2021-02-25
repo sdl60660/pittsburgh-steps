@@ -6,7 +6,7 @@
 
     import { scroll } from './state';
     import BeeSwarm from './BeeSwarm.svelte';
-    import CustomMap from './CustomMap.svelte';
+    import BackgroundMap from './BackgroundMap.svelte';
     
     let dataLoad = d3.csv("data/pittsburgh_steps.csv").then(data => {
         return data;
@@ -82,7 +82,7 @@
         {#await dataLoad}
             <p>Loading data...</p>
         {:then data}
-            <CustomMap bounds={getDataBounds(data)}/>
+            <BackgroundMap bounds={getDataBounds(data)}/>
             <BeeSwarm stepsData={data} />
         {/await}
     </figure>
