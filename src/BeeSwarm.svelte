@@ -24,8 +24,6 @@
         .filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "")
         .sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 );
     let stepsWithImages = stepsData.filter(({ image }) => image );
-    // const exampleIds = ["1025433108", "778711269", "870567808", "41759992"];
-    // let examples = stepsData.filter( d => exampleIds.includes(d.id) );
 
     let latitudeBounds = d3.extent(stepsData, d => d.latitude);
     let longitudeBounds = d3.extent(stepsData, d => d.longitude);
@@ -71,7 +69,15 @@
 
     $: heightScale = d3.scaleLinear()
         .domain([0, totalStepsHeight])
-        .range([0, height*.5])
+        .range([0, height * 10])
+
+    $: timeX = d3.scaleLinear()
+        .domain(d3.extent(stepsData.filter(item => item.year_built !== ""), item => item.year_built))
+        .range([padding, width - padding])
+
+    $: timeY = d3.scaleLinear()
+        .domain(d3.extent(stepsData, item => item.year_index))
+        .range([ height-padding, padding ])
 
     onMount(() => {
         d3.select(viz)
@@ -79,33 +85,29 @@
             .append("g")
             .attr("class", "step-markers")
             .selectAll("rect")
-            .data(usableChartData, d => d.id)
-            .join(
-                enter => {
-                    enter.append("rect")
-                        .attr("class", "step-marker")
-                        .attr("height", 7)
-                        .attr("width", 7)
-                        .style("opacity", 0.0)
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .style("stroke-width", 0)
-                        .style("stroke", "black")
-                        // .on("mouseover", (e, d) => {
-                        //     // selectedImage = `images/${d.id}.jpg`;
-                        //     selectedImage = d.image;
+            .data(stepsData, d => d.id)
+            .join("rect")
+                .attr("class", "step-marker")
+                .attr("height", 7)
+                .attr("width", 7)
+                .style("opacity", 0.0)
+                .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                .style("stroke-width", 0)
+                .style("stroke", "black")
+                // .on("mouseover", (e, d) => {
+                //     // selectedImage = `images/${d.id}.jpg`;
+                //     selectedImage = d.image;
 
-                        //     tooltipTop = `${e.clientY - 10}px`;
-                        //     tooltipLeft = `${e.clientX}px`
+                //     tooltipTop = `${e.clientY - 10}px`;
+                //     tooltipLeft = `${e.clientX}px`
 
-                        //     tooltipVisible = true;
-                        //     selectedName = d.name;
+                //     tooltipVisible = true;
+                //     selectedName = d.name;
 
-                        // })
-                        // .on("mouseout", (e, d) => {
-                        //     tooltipVisible = false;
-                        // })
-                }
-            )
+                // })
+                // .on("mouseout", (e, d) => {
+                //     tooltipVisible = false;
+                // })
     })
 
     $: if (scrollIndex === 0) {
@@ -119,52 +121,105 @@
             .attr("height", imageSize)
 
         svg.style("opacity", 0.7);
-        svg.selectAll(".step-marker")
-            .transition()
-            .duration(1000)
-            .attr("width", imageSize)
-            .attr("height", imageSize)
-            .attr("x", (d, i) => {
-                return imageSize * Math.floor(i / rows);
-            })
-            .attr("y", (d, i) => {
-                return imageSize * ( i % rows);
-            })
-            .style("opacity", 1.0)
-            .transition()
-            .duration(0)
-            .style("fill", d => `url(#${d.id})`)
+        svg.select(".step-markers").selectAll("rect")
+            .data(usableChartData, d => d.id)
+            .join(
+                enter => {
+                    enter.append("rect")
+                        .transition()
+                        .duration(scrollDirection === "up" ? 1000 : 0)
+                        .attr("width", imageSize)
+                        .attr("height", imageSize)
+                        .attr("x", (d, i) => {
+                            return imageSize * Math.floor(i / rows);
+                        })
+                        .attr("y", (d, i) => {
+                            return imageSize * ( i % rows);
+                        })
+                        .style("opacity", 1.0)
+                        .transition()
+                        .duration(0)
+                        .style("fill", d => `url(#${d.id})`)
+
+                    return enter;
+                },
+
+                update => {
+                    update
+                        .transition()
+                        .duration(scrollDirection === "up" ? 1000 : 0)
+                        .attr("width", imageSize)
+                        .attr("height", imageSize)
+                        .attr("x", (d, i) => {
+                            return imageSize * Math.floor(i / rows);
+                        })
+                        .attr("y", (d, i) => {
+                            return imageSize * ( i % rows);
+                        })
+                        .style("opacity", 1.0)
+                        .transition()
+                        .duration(0)
+                        .style("fill", d => `url(#${d.id})`)
+                    
+                    return update;
+                },
+                exit => exit.remove()
+            )
                 
     }
 
 
     $: if (scrollIndex === 1) {
         const svg = d3.select(viz);
+        const stepTransition = 1400;
+
         svg.selectAll(".axis").remove();
 
-        svg.selectAll(".step-image")
-            .transition()
-            .duration(1000)
-            .attr("width", 7)
-            .attr("height", 7)
+        // svg.selectAll(".step-image")
+        //     .transition()
+        //     .ease(d3.easeCubicOut)
+        //     .duration(stepTransition)
+        //     .attr("width", 7)
+        //     .attr("height", 7)
 
-        svg.selectAll(".step-marker")
-            .transition()
-            .duration(scrollDirection === "down" ? 1000 : 1000)
-            .attr("x", d => geoX(d.longitude) - 3.5)
-            .attr("y", d => geoY(d.latitude) - 3.5)
-            .attr("width", 7)
-            .attr("height", 7)
-            .style('opacity', 0.7)
-            .transition()
-            .duration(0)
-            .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+        svg.select(".step-markers").selectAll("rect")
+            .data(stepsData, d => d.id)
+            .join(
+                enter => {
+                    enter.append("rect")
+                        .attr("x", d => geoX(d.longitude) - 3.5)
+                        .attr("y", d => geoY(d.latitude) - 3.5)
+                        .attr("width", 7)
+                        .attr("height", 7)
+                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                        .style("opacity", 0)
+                        .transition()
+                        .delay(stepTransition)
+                        .style("opacity", 0.7);
 
-
-        
+                    return enter;
+                },
+                update => {
+                    update
+                        .transition()
+                        .ease(d3.easeCubicOut)
+                        .duration(stepTransition)
+                        .attr("x", d => geoX(d.longitude) - 3.5)
+                        .attr("y", d => geoY(d.latitude) - 3.5)
+                        .attr("width", 7)
+                        .attr("height", 7)
+                        .style('opacity', 0.7)
+                        .transition()
+                        .duration(0)
+                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                        // .on("end", function() { d3.selectAll(".step-marker").style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray") })
+                },
+                exit => exit.remove()
+            )
+       
         svg
             .transition()
-            .duration(1000)
+            .duration(stepTransition)
             .style("opacity", 1.0);
     }
     
@@ -172,13 +227,24 @@
         const svg = d3.select(viz);
         svg.selectAll(".axis").remove();
 
-        svg.selectAll(".step-marker")
-            .transition()
-            .duration(1000)
-            .attr("x", d => scatterX(d.length))
-            .attr("y", d => scatterY(heightAccessor(d)))
-            .attr("width", 7)
-            .attr("height", 7)
+        svg.select(".step-markers").selectAll("rect")
+            .data(usableChartData, d => d.id)
+            .join(
+                enter => enter,
+                update => {
+                    update
+                        .transition()
+                        .duration(1000)
+                        .attr("x", d => scatterX(d.length))
+                        .attr("y", d => scatterY(heightAccessor(d)))
+                        .attr("width", 7)
+                        .attr("height", 7);
+
+                    return update
+                },
+                exit => exit.remove()
+            )
+            
 
         // X Axis
         const xAxis = d3.axisBottom()
@@ -207,20 +273,83 @@
         const svg = d3.select(viz);
 
         svg.selectAll(".axis").remove();
+
+        heightScale.range([0, height * 0.5])
         
-        svg.selectAll(".step-marker")
-            .transition()
-                .duration(1500)
-                .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                .attr("width", d => heightScale(d.length))
-                .attr("height", d => heightScale(heightAccessor(d)))
-                .attr("x", width / 2 - 200)
-                .attr("y", (d, i) => {
-                    const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
-                    totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
-                    return stepY;
-                })
+        svg.select(".step-markers").selectAll("rect")
+            .data(usableChartData, d => d.id)
+            .join(
+                enter => enter,
+                update => {
+                    update
+                        .transition()
+                        .duration(1500)
+                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                        .attr("width", d => heightScale(d.length))
+                        .attr("height", d => heightScale(heightAccessor(d)))
+                        .attr("x", width / 2 - 200)
+                        .attr("y", (d, i) => {
+                            const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
+                            totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
+                            return stepY;
+                        })
+                    return update;
+                },
+                exit => exit.remove()    
+            )}
+
+    $: if (scrollIndex === 4) {
+        const svg = d3.select(viz);
+        
+        console.log(timeX.domain(), timeX.range())
+        svg.select(".step-markers").selectAll("rect")
+            .data(stepsData.filter(item => item.year_built !== ""), d => d.id)
+            .join(
+                enter => {
+                    enter.append("rect")
+                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                        .attr("width", 7)
+                        .attr("height", 7)
+                        .attr("x", d => timeX(d.year_built))
+                        // .attr("y", d => timeY(d.year_index))
+                        .attr("y", d => height - 50 - 7*(d.year_index))
+                        .style("opacity", 0.0)
+                        .transition()
+                        .duration(1500)
+                        .style("opacity", 0.7)
+                    return enter;
+                },
+                update => {
+                    update
+                        .transition()
+                        .duration(1500)
+                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                        .attr("width", 7)
+                        .attr("height", 7)
+                        .attr("x", d => timeX(d.year_built))
+                        // .attr("y", d => timeY(d.year_index))
+                        .attr("y", d => height - 50 - 7*(d.year_index))
+                    return update;
+                },
+                exit => exit.remove()
+            )
     }
+
+    // $: if (scrollIndex === 4) {
+    //     const svg = d3.select(viz);
+
+    //     heightScale.range([0, height * 0.5])
+        
+    //     svg.selectAll(".step-marker")
+    //         .transition()
+    //             .duration(1500)
+    //             .attr("height", d => heightScale(heightAccessor(d)))
+    //             .attr("y", (d, i) => {
+    //                 const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
+    //                 totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
+    //                 return stepY;
+    //             })
+    // }
 
 </script>
 

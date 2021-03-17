@@ -2,14 +2,26 @@
     import * as d3 from 'd3';
     import { onMount } from 'svelte';
     import scrollama from 'scrollama';
+    // import moment from 'moment';
     // import "intersection-observer";
 
     import { scroll } from './state';
     import BeeSwarm from './BeeSwarm.svelte';
     import BackgroundMap from './BackgroundMap.svelte';
     
+    let yearIndexMap = new Map();
     let dataLoad = d3.csv("data/pittsburgh_steps.csv").then(data => {
-        return data;
+        return data.map(item => {
+            const year = item.installed === "" ? "" : +item.installed.slice(0,4);
+            const yearIndex = yearIndexMap.has(year) ? (yearIndexMap.get(year) + 1) : 0;
+            yearIndexMap.set(year, yearIndex);
+
+            return {
+                    ...item,
+                    year_built: year,
+                    year_index: yearIndex
+                }
+        })
         // return data.filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "");
     })
     let scrollIndex = 0;
@@ -91,7 +103,7 @@
     </figure>
 
     <article>
-        {#each [1,2,3,4,5] as index (index)}
+        {#each [1,2,3,4,5,6,7] as index (index)}
             <div class="step">{index}</div>
         {/each}
     </article>
