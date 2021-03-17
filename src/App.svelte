@@ -14,6 +14,7 @@
     })
     let scrollIndex = 0;
     let scrollProgress = 0;
+    let scrollDirection = "down";
     const scroller = scrollama();
 
     const getDataBounds = (data) => {
@@ -37,6 +38,7 @@
             })
             .onStepEnter(({ element, index, direction }) => {
                 scrollIndex = index;
+                scrollDirection = direction;
             })
             .onStepExit((response) => {
                 // { element, index, direction }
@@ -47,7 +49,8 @@
         scroller.resize();
         return {
             index: scrollIndex,
-            progress: scrollProgress
+            progress: scrollProgress,
+            direction: scrollDirection
         }
     })
 

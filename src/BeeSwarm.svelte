@@ -10,6 +10,7 @@
     let width;
     let scrollIndex = 0;
     let scrollProgress = 0;
+    let scrollDirection = "down";
 
     let tooltip;
     let tooltipTop = 0;
@@ -17,8 +18,12 @@
     let tooltipVisible = false;
     let selectedImage = "";
     let selectedName = "";
+    const imageSize = 125;
 
-    let usableChartData = stepsData.filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "");
+    let usableChartData = stepsData
+        .filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "")
+        .sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 );
+    let stepsWithImages = stepsData.filter(({ image }) => image );
     // const exampleIds = ["1025433108", "778711269", "870567808", "41759992"];
     // let examples = stepsData.filter( d => exampleIds.includes(d.id) );
 
@@ -41,14 +46,13 @@
         }
 	});
 
-    const unsubscribeScroll = scroll.subscribe(({ index, progress }) => {
+    const unsubscribeScroll = scroll.subscribe(({ index, progress, direction }) => {
         scrollIndex = index;
         scrollProgress = progress;
-
-        console.log(scrollIndex, scrollProgress);
+        scrollDirection = direction;
     })
 
-    $: padding = height / 4;
+    $: padding = width / 6;
     $: scatterX = d3.scaleLinear()
         .domain([0, d3.max(usableChartData, d => +d.length)])
         .range([padding, width - padding])
@@ -82,34 +86,95 @@
                         .attr("class", "step-marker")
                         .attr("height", 7)
                         .attr("width", 7)
-                        .style("opacity", 0.7)
+                        .style("opacity", 0.0)
                         .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
                         .style("stroke-width", 0)
                         .style("stroke", "black")
-                        .on("mouseover", (e, d) => {
-                            // selectedImage = `images/${d.id}.jpg`;
-                            selectedImage = d.image;
+                        // .on("mouseover", (e, d) => {
+                        //     // selectedImage = `images/${d.id}.jpg`;
+                        //     selectedImage = d.image;
 
-                            tooltipTop = `${e.clientY - 10}px`;
-                            tooltipLeft = `${e.clientX}px`
+                        //     tooltipTop = `${e.clientY - 10}px`;
+                        //     tooltipLeft = `${e.clientX}px`
 
-                            tooltipVisible = true;
-                            selectedName = d.name;
+                        //     tooltipVisible = true;
+                        //     selectedName = d.name;
 
-                        })
-                        .on("mouseout", (e, d) => {
-                            tooltipVisible = false;
-                        })
+                        // })
+                        // .on("mouseout", (e, d) => {
+                        //     tooltipVisible = false;
+                        // })
                 }
             )
     })
 
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
-        d3.select(viz).selectAll(".axis").remove();
 
-        d3.selectAll(".step-marker")
+        const rows = Math.ceil( height / imageSize ) + 1;
+        const cols = Math.ceil( width / imageSize );
+
+        svg.selectAll(".step-image")
+            .attr("width", imageSize)
+            .attr("height", imageSize)
+
+        svg.style("opacity", 0.7);
+        svg.selectAll(".step-marker")
             .transition()
+            .duration(1000)
+            .attr("width", imageSize)
+            .attr("height", imageSize)
+            .attr("x", (d, i) => {
+                return imageSize * Math.floor(i / rows);
+            })
+            .attr("y", (d, i) => {
+                return imageSize * ( i % rows);
+            })
+            .style("opacity", 1.0)
+            .transition()
+            .duration(0)
+            .style("fill", d => `url(#${d.id})`)
+                
+    }
+
+
+    $: if (scrollIndex === 1) {
+        const svg = d3.select(viz);
+        svg.selectAll(".axis").remove();
+
+        svg.selectAll(".step-image")
+            .transition()
+            .duration(1000)
+            .attr("width", 7)
+            .attr("height", 7)
+
+        svg.selectAll(".step-marker")
+            .transition()
+            .duration(scrollDirection === "down" ? 1000 : 1000)
+            .attr("x", d => geoX(d.longitude) - 3.5)
+            .attr("y", d => geoY(d.latitude) - 3.5)
+            .attr("width", 7)
+            .attr("height", 7)
+            .style('opacity', 0.7)
+            .transition()
+            .duration(0)
+            .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+
+
+        
+        svg
+            .transition()
+            .duration(1000)
+            .style("opacity", 1.0);
+    }
+    
+    $: if (scrollIndex === 2) {
+        const svg = d3.select(viz);
+        svg.selectAll(".axis").remove();
+
+        svg.selectAll(".step-marker")
+            .transition()
+            .duration(1000)
             .attr("x", d => scatterX(d.length))
             .attr("y", d => scatterY(heightAccessor(d)))
             .attr("width", 7)
@@ -135,24 +200,18 @@
             .attr("transform", `translate(${padding}, 0)`)
             .call(yAxis);
     }
-
-    $: if (scrollIndex === 1) {
-            d3.select(viz).selectAll(".axis").remove();
-
-            d3.selectAll(".step-marker")
-                .transition()
-                .duration(1000)
-                .attr("x", d => geoX(d.longitude) - 3.5)
-                .attr("y", d => geoY(d.latitude) - 3.5)
-                .attr("width", 7)
-                .attr("height", 7)
-        }
     
     let totalHeight = 0;
-    $: if (scrollIndex === 2) {
-        d3.selectAll(".step-marker")
+
+    $: if (scrollIndex === 3) {
+        const svg = d3.select(viz);
+
+        svg.selectAll(".axis").remove();
+        
+        svg.selectAll(".step-marker")
             .transition()
                 .duration(1500)
+                .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
                 .attr("width", d => heightScale(d.length))
                 .attr("height", d => heightScale(heightAccessor(d)))
                 .attr("x", width / 2 - 200)
@@ -188,10 +247,23 @@
         /* max-width: 150px; */
         height: auto;
     }
+
+    /* .step-image {
+        min-width: 100px;
+        height: auto;
+    } */
 </style>
 
 <figure class="figure" bind:clientWidth={width} bind:clientHeight={height}>
-    <svg bind:this={viz} class="viz-tile"></svg>
+    <svg bind:this={viz} class="viz-tile">
+        <defs>
+            {#each stepsWithImages as { image, id }, i}
+                <pattern patternUnits={"objectBoundingBox"} height={1} width={1} class={"step-image-pattern"} key={i} {id}>
+                    <image href={`images/compressed_images/${id}.jpg`} id={`${id}-photo`} class={"step-image"} x={0} y={0} width={imageSize} height={imageSize} />
+                </pattern>
+            {/each}
+        </defs>
+    </svg>
     <div bind:this={tooltip} class="tooltip" style="opacity: {tooltipVisible ? 1 : 0}; top: {tooltipTop}; left: {tooltipLeft}; transform: translate(-50%, -100%);">
         <img width={150} src={selectedImage} alt={selectedName}>
     </div>

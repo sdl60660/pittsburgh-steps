@@ -47,7 +47,7 @@ id,name,maintenance_responsibility,installed,material,length,number_of_steps,sch
 1693968083,Ballinger St from Edgebrook Ave to Heber Way,4th Division,1948-01-01,Concrete,192,167,0,100,262,70,4,6,1,https://tools.wprdc.org/images/pittsburgh/steps/Ballinger_St_from_Edgebrook_Ave_to_Heber_Way.jpg,Brookline,4,32,42003320600,5,32,6,4-25,40.40115194,-80.00273987
 1800935282,Barry St from Josephine St to Mission St,DOMI - Signs and Markings,1947-01-01,Concrete,474,78,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Barry_St_from_Josephine_St_to_Mission_St.jpg,South Side Slopes,3,16,42003160800,3,16,3,4-24,40.42342772,-79.96991869
 1078917649,Barry St from Mission St to Holt St West,4th Division,1947-01-01,Concrete,113,58,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Barry_St_from_Mission_St_to_Holt_St_West.jpg,South Side Slopes,3,16,42003160800,3,16,3,4-22,40.42229012,-79.97066956
-1728342157,Barry St from Mission to Holt St East,4th Division,1947-01-01,Concrete,127,32,0,100,904,45,4,1,5,https://tools.wprdc.org/images/pittsburgh/steps/Barry_St_from_Mission_to_Holt_St_East.jpg,South Side Slopes,3,16,42003160800,3,16,3,4-22,40.42234841,-79.97051424
+1728342157,Barry St from Mission to Holt St East,4th Division,1947-01-01,Concrete,127,32,0,100,904,45,4,1,5,,South Side Slopes,3,16,42003160800,3,16,3,4-22,40.42234841,-79.97051424
 574534527,Basin St from Province St to Goettmann St,1st Division,1950-01-01,Concrete,278,93,1,3,657,29,4,3,9,https://tools.wprdc.org/images/pittsburgh/steps/Basin_St_from_Province_St_to_Goettmann_St.jpg,Troy Hill,1,24,42003240600,1,24,1,1-2,40.45780529,-79.98997601
 1167452566,Basin St from Voskamp St to Brabec St,1st Division,1950-01-01,Concrete,345,188,0,100,795,14,6,7,10,https://tools.wprdc.org/images/pittsburgh/steps/Basin_St_from_Voskamp_St_to_Brabec_St.jpg,Troy Hill,1,24,42003240600,1,24,1,1-5,40.45911502,-79.99008077
 195103106,Bates St near Frazier St from Hodge St to Bates St,3rd Division,,Wood,77,32,0,100,647,89,6,6,8,https://tools.wprdc.org/images/pittsburgh/steps/Bates_St_near_Frazier_St_from_Hodge_St_to_Bates_St.jpg,South Oakland,3,4,42003040900,3,4,4,2-11,40.4329744,-79.95871002
@@ -851,14 +851,14 @@ id,name,maintenance_responsibility,installed,material,length,number_of_steps,sch
 183700507,Zara St from Zara St to Beltzhoover Ave,4th Division,,Wood,37,12,1,10,833,83,10,10,10,https://tools.wprdc.org/images/pittsburgh/steps/Zara_St_from_Zara_St_to_Beltzhoover_Ave.jpg,Knoxville,3,30,42003300100,5,30,3,4-21,40.41564908,-79.99704654
 85037920,Highland Park 4,Parks - Northeast,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Highland_Park_4.jpg,Highland Park,7,11,42003980100,2,11,5,3-9,40.48139636,-79.91846456
 547777029,Highland Park 5,Parks - Northeast,,Stone,35,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Highland_Park_5.jpg,Highland Park,7,11,42003980100,2,11,5,3-9,40.48240422,-79.91723369
-719755231,Well St from Edith St to Orlena Way,5th Division,,Brick/Asphalt,125,19,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Well_St_from_Edith_St_to_Orlena_Way.jpg,Duquesne Heights,2,19,42003191100,5,19,3,4-1,40.43632253,-80.02433429
+719755231,Well St from Edith St to Orlena Way,5th Division,,Brick/Asphalt,125,19,,,,,,,,,Duquesne Heights,2,19,42003191100,5,19,3,4-1,40.43632253,-80.02433429
 1633137989,Well St from Orlena Way to Augusta St,5th Division,,,95,5,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Well_St_from_Orlena_Way_to_Augusta_St.jpg,Duquesne Heights,2,19,42003191100,5,19,3,4-1,40.43617861,-80.02389709
 324646102,Bigelow Blvd to Paulowna St,3rd Division,,Concrete,,4,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Bigelow_Blvd_to_Paulowna_St.jpg,Polish Hill,7,6,42003060500,6,6,2,2-6,40.45581179,-79.96614072
 588667971,Highland Park 6,Parks - Northeast,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Highland_Park_6.jpg,Highland Park,7,11,42003980100,2,11,5,3-9,40.48260009,-79.91209743
 455079005,Bon Air Park,Parks - Southern,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Bon_Air_Park.jpg,Bon Air,4,18,42003562400,5,18,3,4-7,40.40753188,-79.99972878
 493229324,McGonigle Park,Parks - Western,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/McGonigle_Park.jpg,Sheraden,2,20,42003562500,5,20,6,1-16,40.45971888,-80.06502249
 2025391586,Oakwood Park,Parks - Western,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Oakwood_Park.jpg,Oakwood,2,28,42003562800,5,28,6,1-19,40.4259571,-80.06713515
-1137441282,List St to Buente St,1st Division,2019-06-07,Wood,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/List_St_to_Buente_St.jpg,Spring Hill-City View,1,26,42003262000,1,26,1,1-11,40.46671405,-79.99667968
+1137441282,List St to Buente St,1st Division,2019-06-07,Wood,,,,,,,,,,,Spring Hill-City View,1,26,42003262000,1,26,1,1-11,40.46671405,-79.99667968
 1422401205,Phillips Park 2,Parks - Southern,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Phillips_Park_2.jpg,Overbrook,4,29,42003290400,5,29,3,4-23,40.39027711,-79.99209392
 529508700,Phillips Park 3,Parks - Southern,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Phillips_Park_3.jpg,Carrick,4,29,42003290400,3,29,3,4-23,40.39202444,-79.99261512
 1698263333,Phillips Park 4,Parks - Southern,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Phillips_Park_4.jpg,Carrick,4,29,42003290400,3,29,3,4-23,40.39232679,-79.99213904
@@ -866,9 +866,9 @@ id,name,maintenance_responsibility,installed,material,length,number_of_steps,sch
 1180122386,Washington's Landing Park 1,Parks - Northern,,Wood,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Washington's_Landing_Park_1.jpg,Troy Hill,1,24,42003240600,6,24,1,1-1,40.46999529,-79.97260496
 980560045,Washington's Landing Park 2,Parks - Northern,,Wood,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Washington's_Landing_Park_2.jpg,Troy Hill,1,24,42003240600,6,24,1,1-1,40.46770563,-79.97393472
 255567129,Washington's Landing Park 3,Parks - Northern,,Wood,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Washington's_Landing_Park_3.jpg,Troy Hill,1,24,42003240600,6,24,1,1-1,40.4677835,-79.97416032
-821113593,Robert E Williams 4,Parks - Schenley,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Robert_E_Williams_4.jpg,Upper Hill,6,5,42003050600,3,5,2,2-22,40.4541017,-79.95872697
-65908789,Robert E Williams Park 2,Parks - Schenley,,Stone,,5,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Robert_E_Williams_Park_2.jpg,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45603487,-79.95870433
-1666753520,Robert E Williams Park 3,Parks - Schenley,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Robert_E_Williams_Park_3.jpg,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45383128,-79.95879135
+821113593,Robert E Williams 4,Parks - Schenley,,Stone,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.4541017,-79.95872697
+65908789,Robert E Williams Park 2,Parks - Schenley,,Stone,,5,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45603487,-79.95870433
+1666753520,Robert E Williams Park 3,Parks - Schenley,,Stone,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45383128,-79.95879135
 333607841,Allegheny Commons 1,Parks - Northern,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Allegheny_Commons_1.jpg,Allegheny Center,1,22,42003562700,1,22,1,1-6,40.45212408,-80.00166637
 568447632,Allegheny Commons 2,Parks - Northern,,Stone,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Allegheny_Commons_2.jpg,Allegheny Center,1,22,42003562700,1,22,1,1-6,40.45207,-80.00194398
 1482433380,Frick Park Nature Center,Parks - Eastern,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Frick_Park_Nature_Center.jpg,Squirrel Hill South,5,14,42003980300,3,14,4,2-21,40.43666672,-79.90817555
@@ -1035,7 +1035,7 @@ id,name,maintenance_responsibility,installed,material,length,number_of_steps,sch
 233152030,Arsenal Park 8,Parks - Northeast,,Stone,,,,,,,,,,,Lower Lawrenceville,7,6,42003060300,2,6,2,3-3,40.46681235,-79.96262826
 1474309527,Arsenal Park 9,Parks - Northeast,,Stone,,,,,,,,,,,Lower Lawrenceville,7,6,42003060300,2,6,2,3-3,40.46684168,-79.96245962
 1599109192,Fort Duquesne Pedestrian Bridge,Parks - Northern,,Concrete,,,,,,,,,,,North Shore,1,22,42003981200,6,22,1,1-7,40.44577906,-80.01001956
-544786844,Robert E Williams Park,Parks - Schenley,,Concrete,,,,,,,,,,https://tools.wprdc.org/images/pittsburgh/steps/Robert_E_Williams_Park.jpg,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45471888,-79.96057896
+544786844,Robert E Williams Park,Parks - Schenley,,Concrete,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45471888,-79.96057896
 1203503795,Robert E Williams Park 4,Parks - Schenley,,Stone,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45469541,-79.96028426
 1468373881,Robert E Williams Park 5,Parks - Schenley,,Concrete,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45456428,-79.95972971
 649292681,Robert E Williams Park 6,Parks - Schenley,,Stone,,,,,,,,,,,Upper Hill,6,5,42003050600,3,5,2,2-22,40.45484797,-79.95916443
