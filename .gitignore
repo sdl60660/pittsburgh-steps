@@ -1,6 +1,6 @@
 /node_modules/
 /public/build/
-/public/images/
+/public/images/full_size_images/*
 
 .DS_Store
 
