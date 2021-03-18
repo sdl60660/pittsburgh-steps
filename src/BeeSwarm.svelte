@@ -20,9 +20,9 @@
     let selectedName = "";
     const imageSize = 125;
 
+    stepsData = stepsData.sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 )
     let usableChartData = stepsData
-        .filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "")
-        .sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 );
+        .filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "");
     let stepsWithImages = stepsData.filter(({ image }) => image );
 
     let latitudeBounds = d3.extent(stepsData, d => d.latitude);
@@ -79,10 +79,13 @@
         .domain(d3.extent(stepsData, item => item.year_index))
         .range([ height-padding, padding ])
 
+    $: rows = Math.ceil( height / imageSize ) + 1;
+    $: cols = Math.ceil( width / imageSize );
+
     onMount(() => {
-        d3.select(viz)
-            // .attr("viewBox", [0, 0, width, height])
-            .append("g")
+        const svg = d3.select(viz);
+
+        svg.append("g")
             .attr("class", "step-markers")
             .selectAll("rect")
             .data(stepsData, d => d.id)
@@ -108,231 +111,168 @@
                 // .on("mouseout", (e, d) => {
                 //     tooltipVisible = false;
                 // })
+        
+        svg.append("g")
+            .attr("class", "y-axis axis")
+        
+        svg.append("g")
+            .attr("class", "x-axis axis")
     })
+
+    $: d3.select(".y-axis")
+        .attr("transform", `translate(${padding}, 0)`)
+        .style("display", [3].includes(scrollIndex) ? "block" : "none");
+    $: d3.select(".x-axis")
+        .attr("transform", `translate(0, ${height - padding + 10})`)
+        .style("display", [2,3].includes(scrollIndex) ? "block" : "none");
+
+    $: xAxisScale = scrollIndex === 2 ? timeX : scatterX;
+    $: yAxisScale = scatterY
+    $: xAxis = d3.axisBottom()
+        .scale(xAxisScale)
+        .tickFormat(d3.format("d"))
+        // .ticks(5);
+    $: yAxis = d3.axisLeft()
+        .scale(yAxisScale)
+        .ticks(4);
+    
+    
+
 
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
-
-        const rows = Math.ceil( height / imageSize ) + 1;
-        const cols = Math.ceil( width / imageSize );
 
         svg.selectAll(".step-image")
             .attr("width", imageSize)
             .attr("height", imageSize)
 
         svg.style("opacity", 0.7);
-        svg.select(".step-markers").selectAll("rect")
-            .data(usableChartData, d => d.id)
-            .join(
-                enter => {
-                    enter.append("rect")
-                        .transition()
-                        .duration(scrollDirection === "up" ? 1000 : 0)
-                        .attr("width", imageSize)
-                        .attr("height", imageSize)
-                        .attr("x", (d, i) => {
-                            return imageSize * Math.floor(i / rows);
-                        })
-                        .attr("y", (d, i) => {
-                            return imageSize * ( i % rows);
-                        })
-                        .style("opacity", 1.0)
-                        .transition()
-                        .duration(0)
-                        .style("fill", d => `url(#${d.id})`)
-
-                    return enter;
-                },
-
-                update => {
-                    update
-                        .transition()
-                        .duration(scrollDirection === "up" ? 1000 : 0)
-                        .attr("width", imageSize)
-                        .attr("height", imageSize)
-                        .attr("x", (d, i) => {
-                            return imageSize * Math.floor(i / rows);
-                        })
-                        .attr("y", (d, i) => {
-                            return imageSize * ( i % rows);
-                        })
-                        .style("opacity", 1.0)
-                        .transition()
-                        .duration(0)
-                        .style("fill", d => `url(#${d.id})`)
-                    
-                    return update;
-                },
-                exit => exit.remove()
-            )
+        svg.selectAll(".step-marker")
+            .transition()
+            .duration(scrollDirection === "up" ? 1000 : 0)
+            .attr("width", imageSize)
+            .attr("height", imageSize)
+            .attr("x", (d, i) => {
+                return imageSize * Math.floor(i / rows);
+            })
+            .attr("y", (d, i) => {
+                return imageSize * ( i % rows);
+            })
+            .style("opacity", 1.0)
+            .transition()
+            .duration(0)
+            .style("fill", d => `url(#${d.id})`)
                 
     }
 
 
     $: if (scrollIndex === 1) {
         const svg = d3.select(viz);
-        const stepTransition = 1400;
+        const stepTransition = 1000;
 
-        svg.selectAll(".axis").remove();
+        // svg.selectAll(".axis").remove();
 
-        // svg.selectAll(".step-image")
-        //     .transition()
-        //     .ease(d3.easeCubicOut)
-        //     .duration(stepTransition)
-        //     .attr("width", 7)
-        //     .attr("height", 7)
+        svg.selectAll(".step-image")
+            .transition()
+            .ease(d3.easeCubicOut)
+            .duration(stepTransition)
+            .attr("width", 7)
+            .attr("height", 7)
 
-        svg.select(".step-markers").selectAll("rect")
-            .data(stepsData, d => d.id)
-            .join(
-                enter => {
-                    enter.append("rect")
-                        .attr("x", d => geoX(d.longitude) - 3.5)
-                        .attr("y", d => geoY(d.latitude) - 3.5)
-                        .attr("width", 7)
-                        .attr("height", 7)
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .style("opacity", 0)
-                        .transition()
-                        .delay(stepTransition)
-                        .style("opacity", 0.7);
-
-                    return enter;
-                },
-                update => {
-                    update
-                        .transition()
-                        .ease(d3.easeCubicOut)
-                        .duration(stepTransition)
-                        .attr("x", d => geoX(d.longitude) - 3.5)
-                        .attr("y", d => geoY(d.latitude) - 3.5)
-                        .attr("width", 7)
-                        .attr("height", 7)
-                        .style('opacity', 0.7)
-                        .transition()
-                        .duration(0)
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        // .on("end", function() { d3.selectAll(".step-marker").style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray") })
-                },
-                exit => exit.remove()
-            )
-       
+        svg.selectAll(".step-marker")
+            .style("display", "block")
+            .transition()
+            .ease(d3.easeCubicOut)
+            .duration((d, i) => {
+                if ( scrollDirection === "down" ) {
+                    return i > rows * cols ? 0 : stepTransition
+                }
+                else {
+                    return stepTransition
+                }      
+            })
+            .attr("x", d => geoX(d.longitude) - 3.5)
+            .attr("y", d => geoY(d.latitude) - 3.5)
+            .attr("width", 7)
+            .attr("height", 7)
+            .style('opacity', 0.7)
+            // .transition()
+            // .duration(0)
+            .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+            // .on("end", function() { d3.selectAll(".step-marker").style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray") })
+ 
         svg
             .transition()
             .duration(stepTransition)
             .style("opacity", 1.0);
     }
-    
+
     $: if (scrollIndex === 2) {
         const svg = d3.select(viz);
-        svg.selectAll(".axis").remove();
+        
+        svg.selectAll(".step-marker")
+            .style("display", d => d.year_built !== "" ? "block" : "none")
+            .style("opacity", d => d.year_built !== "" ? 0.7 : 0.0)
+            .transition()
+                .duration(1500)
+                .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                .attr("width", 7)
+                .attr("height", 7)
+                .attr("x", d => d.year_built === "" ? width / 2 : timeX(d.year_built))
+                // .attr("y", d => timeY(d.year_index))
+                .attr("y", d => d.year_built === "" ? height - padding - 10 : height - padding - 7*(d.year_index))
+        
+        // X Axis  
+        svg.select(".x-axis")
+            .call(xAxis);
+    }
+    
+    $: if (scrollIndex === 3) {
+        const svg = d3.select(viz);
+        // svg.selectAll(".axis").remove();
 
-        svg.select(".step-markers").selectAll("rect")
-            .data(usableChartData, d => d.id)
-            .join(
-                enter => enter,
-                update => {
-                    update
-                        .transition()
-                        .duration(1000)
-                        .attr("x", d => scatterX(d.length))
-                        .attr("y", d => scatterY(heightAccessor(d)))
-                        .attr("width", 7)
-                        .attr("height", 7);
+        svg.selectAll(".step-marker")
+            .style("display", d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "" ? "block" : "none")
+            .transition()
+            .duration(d => d.year_built === "" ? 1000 : 1000)
+            .delay(d => d.year_built === "" ? 0 : 0)
+            .style("opacity", 0.7)
+            .attr("x", d => scatterX(d.length))
+            .attr("y", d => scatterY(heightAccessor(d)))
+            .attr("width", 7)
+            .attr("height", 7)
 
-                    return update
-                },
-                exit => exit.remove()
-            )
-            
-
-        // X Axis
-        const xAxis = d3.axisBottom()
-            .scale(scatterX)
-            .ticks(5);
-
-        svg.append("g")
-            .attr("class", "x-axis axis")
-            .attr("transform", `translate(0, ${height - padding + 10})`)
+        // X Axis  
+        svg.select(".x-axis")
             .call(xAxis);
         
         // Y Axis
-        const yAxis = d3.axisLeft()
-            .scale(scatterY)
-            .ticks(4);
-
-        svg.append("g")
-            .attr("class", "y-axis axis")
-            .attr("transform", `translate(${padding}, 0)`)
+        svg.select(".y-axis")
             .call(yAxis);
     }
     
     let totalHeight = 0;
 
-    $: if (scrollIndex === 3) {
+    $: if (scrollIndex === 4) {
         const svg = d3.select(viz);
 
-        svg.selectAll(".axis").remove();
+        // svg.selectAll(".axis").remove();
 
         heightScale.range([0, height * 0.5])
         
-        svg.select(".step-markers").selectAll("rect")
-            .data(usableChartData, d => d.id)
-            .join(
-                enter => enter,
-                update => {
-                    update
-                        .transition()
-                        .duration(1500)
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .attr("width", d => heightScale(d.length))
-                        .attr("height", d => heightScale(heightAccessor(d)))
-                        .attr("x", width / 2 - 200)
-                        .attr("y", (d, i) => {
-                            const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
-                            totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
-                            return stepY;
-                        })
-                    return update;
-                },
-                exit => exit.remove()    
-            )}
-
-    $: if (scrollIndex === 4) {
-        const svg = d3.select(viz);
-        
-        console.log(timeX.domain(), timeX.range())
-        svg.select(".step-markers").selectAll("rect")
-            .data(stepsData.filter(item => item.year_built !== ""), d => d.id)
-            .join(
-                enter => {
-                    enter.append("rect")
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .attr("width", 7)
-                        .attr("height", 7)
-                        .attr("x", d => timeX(d.year_built))
-                        // .attr("y", d => timeY(d.year_index))
-                        .attr("y", d => height - 50 - 7*(d.year_index))
-                        .style("opacity", 0.0)
-                        .transition()
-                        .duration(1500)
-                        .style("opacity", 0.7)
-                    return enter;
-                },
-                update => {
-                    update
-                        .transition()
-                        .duration(1500)
-                        .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
-                        .attr("width", 7)
-                        .attr("height", 7)
-                        .attr("x", d => timeX(d.year_built))
-                        // .attr("y", d => timeY(d.year_index))
-                        .attr("y", d => height - 50 - 7*(d.year_index))
-                    return update;
-                },
-                exit => exit.remove()
-            )
+        svg.selectAll(".step-marker")
+            .style("display", d => d.number_of_steps !== "" ? "block" : "none")
+            .transition()
+                .duration(1500)
+                .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)) || "gray")
+                .attr("width", d => heightScale(d.length))
+                .attr("height", d => heightScale(heightAccessor(d)))
+                .attr("x", width / 2 - 200)
+                .attr("y", (d, i) => {
+                    const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
+                    totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
+                    return stepY;
+                })
     }
 
     // $: if (scrollIndex === 4) {

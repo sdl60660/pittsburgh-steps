@@ -25,7 +25,7 @@
 				zoom: 9
 			});
 			map.scrollZoom.disable();
-			map.fitBounds(bounds, { animate: false, padding: 20 });
+			map.fitBounds(bounds, { animate: false, padding: 10 });
 			mapBounds = map.getBounds();
 		};
 
