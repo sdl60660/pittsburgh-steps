@@ -10,8 +10,15 @@
     import BackgroundMap from './BackgroundMap.svelte';
     
     let yearIndexMap = new Map();
-    let dataLoad = d3.csv("data/pittsburgh_steps.csv").then(data => {
-        return data.map(item => {
+
+    const promises = [
+        d3.csv("data/pittsburgh_steps.csv"),
+        d3.csv("data/pittsburgh_population.csv")
+    ];
+
+
+    let dataLoad = Promise.all(promises).then(data => {
+        data[0] = data[0].map(item => {
             const year = item.installed === "" ? "" : +item.installed.slice(0,4);
             const yearIndex = yearIndexMap.has(year) ? (yearIndexMap.get(year) + 1) : 0;
             yearIndexMap.set(year, yearIndex);
@@ -22,6 +29,10 @@
                     year_index: yearIndex
                 }
         })
+
+        data[1] = data[1].reverse();
+
+        return data;
         // return data.filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "");
     })
     let scrollIndex = 0;
@@ -97,8 +108,8 @@
         {#await dataLoad}
             <p>Loading data...</p>
         {:then data}
-            <BackgroundMap bounds={getDataBounds(data)}/>
-            <BeeSwarm stepsData={data} />
+            <BackgroundMap bounds={getDataBounds(data[0])}/>
+            <BeeSwarm stepsData={data[0]} populationData={data[1]} />
         {/await}
     </figure>
 

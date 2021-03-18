@@ -1,9 +1,15 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+
     import { coordinates, scroll } from './state.js';
+    import { lineTransition } from './utils'
+
 
     export let stepsData;
+    export let populationData;
+
+    console.log(populationData);
 
     let viz;
     let height;
@@ -50,14 +56,19 @@
         scrollDirection = direction;
     })
 
-    $: padding = width / 6;
+    $: line = d3.line()
+        .defined(d => !isNaN(d.population))
+        .x(d => timeX(d.year))
+        .y(d => timeY(d.population))
+
+    $: padding = { horizontal: width / 6, vertical: height / 8 };
     $: scatterX = d3.scaleLinear()
         .domain([0, d3.max(usableChartData, d => +d.length)])
-        .range([padding, width - padding])
+        .range([padding.horizontal, width - padding.horizontal])
 
     $: scatterY = d3.scaleLinear()
         .domain([0, d3.max(usableChartData, d => heightAccessor(d))])
-        .range([height - padding, padding])
+        .range([height - padding.vertical, padding.vertical])
 
     $: geoY = d3.scaleLinear()
         .domain(latitudeBounds)
@@ -72,12 +83,13 @@
         .range([0, height * 10])
 
     $: timeX = d3.scaleLinear()
-        .domain(d3.extent(stepsData.filter(item => item.year_built !== ""), item => item.year_built))
-        .range([padding, width - padding])
+        .domain(d3.extent(populationData, item => item.year))
+        // .domain(d3.extent(stepsData.filter(item => item.year_built !== ""), item => item.year_built))
+        .range([padding.horizontal, width - padding.horizontal])
 
     $: timeY = d3.scaleLinear()
-        .domain(d3.extent(stepsData, item => item.year_index))
-        .range([ height-padding, padding ])
+        .domain([0, d3.max(populationData, item => item.population)])
+        .range([ height-padding.vertical, padding.vertical ])
 
     $: rows = Math.ceil( height / imageSize ) + 1;
     $: cols = Math.ceil( width / imageSize );
@@ -113,17 +125,20 @@
                 // })
         
         svg.append("g")
-            .attr("class", "y-axis axis")
+            .attr("class", "y-axis axis");
         
         svg.append("g")
-            .attr("class", "x-axis axis")
+            .attr("class", "x-axis axis");
+
+        svg.append("g")
+            .attr("class", "population-chart");
     })
 
     $: d3.select(".y-axis")
-        .attr("transform", `translate(${padding}, 0)`)
+        .attr("transform", `translate(${padding.horizontal}, 0)`)
         .style("display", [3].includes(scrollIndex) ? "block" : "none");
     $: d3.select(".x-axis")
-        .attr("transform", `translate(0, ${height - padding + 10})`)
+        .attr("transform", `translate(0, ${height - padding.vertical + 10})`)
         .style("display", [2,3].includes(scrollIndex) ? "block" : "none");
 
     $: xAxisScale = scrollIndex === 2 ? timeX : scatterX;
@@ -135,6 +150,9 @@
     $: yAxis = d3.axisLeft()
         .scale(yAxisScale)
         .ticks(4);
+
+    
+    $: d3.select(".population-chart").style("display", scrollIndex === 2 ? "block" : "none");
     
     
 
@@ -220,7 +238,19 @@
                 .attr("height", 7)
                 .attr("x", d => d.year_built === "" ? width / 2 : timeX(d.year_built))
                 // .attr("y", d => timeY(d.year_index))
-                .attr("y", d => d.year_built === "" ? height - padding - 10 : height - padding - 7*(d.year_index))
+                .attr("y", d => d.year_built === "" ? height - padding.vertical - 10 : height - padding.vertical - 7*(d.year_index))
+        
+        svg.select(".population-chart").selectAll(".population-line")
+            .data([populationData])
+            .join("path")
+            .attr("class", "population-line")
+            .attr("fill", "none")
+            .attr("stroke", "steelblue")
+            .attr("stroke-width", 1.5)
+            .attr("stroke-linejoin", "round")
+            .attr("stroke-linecap", "round")
+            .attr("d", line)
+            .call(lineTransition, 1500);
         
         // X Axis  
         svg.select(".x-axis")
@@ -269,7 +299,7 @@
                 .attr("height", d => heightScale(heightAccessor(d)))
                 .attr("x", width / 2 - 200)
                 .attr("y", (d, i) => {
-                    const stepY = height - padding - heightScale(heightAccessor(d)) - heightScale(totalHeight);
+                    const stepY = height - padding.vertical - heightScale(heightAccessor(d)) - heightScale(totalHeight);
                     totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
                     return stepY;
                 })
