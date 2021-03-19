@@ -32,7 +32,7 @@
     $: imageSize = width < mobileBreakpoint ? 75 : 125;
     $: blockSize = width < mobileBreakpoint ? 3 : 7;
 
-    stepsData = stepsData.sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 )
+    stepsData = stepsData.sort((a, b) => +a.id - +b.id).sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 )
     let usableChartData = stepsData
         .filter( d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "");
     let stepsWithImages = stepsData.filter(({ image }) => image );
@@ -255,13 +255,17 @@
         .style("display", [3,4,5].includes(scrollIndex) ? "block" : "none");
 
     $: d3.select(".x-axis-label")
+        .transition()
+        .duration(1000)
         .attr("x", scrollIndex === 3 ? (timeX.range()[0] + timeX.range()[1]) / 2 : (scatterX.range()[0] + scatterX.range()[1]) / 2)
         .attr("y", height - padding.vertical + 50)
         .style("display", [3,4,5].includes(scrollIndex) ? "block" : "none")
         .text( scrollIndex === 3 ? "Year Constructed" : "Length of Staircase (feet)")
     $: d3.select(".y-axis-label")
+        .transition()
+        .duration(scrollIndex === 5 ? 1000 : 0)
         .attr("x", padding.horizontal + 10)
-        .attr("y", padding.vertical + (width < mobileBreakpoint ? -5 : 10))
+        .attr("y", scatterY.range()[1] + (width < mobileBreakpoint ? 10 : 10))
         .style("display", [4,5].includes(scrollIndex) ? "block" : "none")
         .text("Height of Staircase (feet)")
     $: d3.selectAll(".label").style("font-size", labelSize)
@@ -413,10 +417,14 @@
 
         // X Axis  
         svg.select(".x-axis")
+            .transition()
+            .duration( scrollIndex === 5 ? blockTransitionTime : 0 )
             .call(xAxis);
         
         // Y Axis
         svg.select(".y-axis")
+            .transition()
+            .duration( scrollIndex === 5 ? blockTransitionTime : 0 )
             .call(yAxis);
 
     }
