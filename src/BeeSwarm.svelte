@@ -66,7 +66,7 @@
         .x(d => timeX(d.year))
         .y(d => timeY(d.population))
 
-    $: padding = { horizontal: width < mobileBreakpoint ? 35 : width / 6, vertical: width < mobileBreakpoint ? height / 6 : height / 8 };
+    $: padding = { horizontal: width < mobileBreakpoint ? 42 : width / 6, vertical: width < mobileBreakpoint ? height / 5 : height / 8 };
     $: shorterEdge = Math.min(height, width)
     $: shorterAxisLength = Math.min(height - (padding.vertical*2), width - (padding.horizontal*2))
 
@@ -240,7 +240,7 @@
             .data(imageData)
             .join("svg:image")
             .attr("class", "comparison-image")
-            .attr("xlink:href", d => d.image_link)
+            .attr("xlink:href", d => width < mobileBreakpoint ? d.mobile_image_link : d.image_link)
             .attr("x", width)
 
         // svg.call(zoom);
@@ -280,7 +280,8 @@
     $: yAxis = d3.axisLeft()
         .scale(yAxisScale)
         .tickFormat(d3.format("d"))
-        .ticks(4);
+        .ticks(scrollIndex === 6 ? 1 : 4)
+        .tickValues(scrollIndex === 6 ? [3000] : null)
 
     $: d3.select(".population-chart").style("display", scrollIndex === 3 ? "block" : "none");   
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
@@ -482,7 +483,7 @@
             .delay(2000)
             .duration(1000)
             .call(d3.axisLeft()
-                .scale(yAxisHeightScale));
+                .scale(yAxisHeightScale).ticks(1));
         
         svg.selectAll(".step-marker")
             .style("display", d => d.number_of_steps !== "" ? "block" : "none")
@@ -515,13 +516,13 @@
             .transition("slide-in")
             .delay((d, i) => i*2000)
             .duration(1200)
-                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*50 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
+                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*25 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
                 .attr("y", d => d.name === "Mt. Everest" ? height - padding.vertical - heightScale(+d.height) : height - padding.vertical - heightScaleZoom(+d.height))
                 .attr("height", d => d.name === "Mt. Everest" ? heightScale(+d.height) : heightScaleZoom(+d.height))
             .transition("re-scale")
             .delay((d, i) => 1000-(i*1000))
             .duration(1000)
-                .attr("x", (d,i) => padding.horizontal + (i+1)*50)
+                .attr("x", (d,i) => padding.horizontal + (i+1)*25)
                 .attr("y", d => height - padding.vertical - heightScale(+d.height))
                 .attr("height", d => heightScale(+d.height))
 
