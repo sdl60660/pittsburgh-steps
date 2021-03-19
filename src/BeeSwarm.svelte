@@ -256,14 +256,14 @@
 
     $: d3.select(".x-axis-label")
         .transition()
-        .duration(1000)
+        .duration(((scrollIndex === 5 && scrollDirection === "down") || (scrollIndex === 4 && scrollDirection === "up")) ? 1000 : 0 )
         .attr("x", scrollIndex === 3 ? (timeX.range()[0] + timeX.range()[1]) / 2 : (scatterX.range()[0] + scatterX.range()[1]) / 2)
         .attr("y", height - padding.vertical + 50)
         .style("display", [3,4,5].includes(scrollIndex) ? "block" : "none")
         .text( scrollIndex === 3 ? "Year Constructed" : "Length of Staircase (feet)")
     $: d3.select(".y-axis-label")
         .transition()
-        .duration(scrollIndex === 5 ? 1000 : 0)
+        .duration(((scrollIndex === 5 && scrollDirection === "down") || (scrollIndex === 4 && scrollDirection === "up")) ? 1000 : 0 )
         .attr("x", padding.horizontal + 10)
         .attr("y", scatterY.range()[1] + (width < mobileBreakpoint ? 10 : 10))
         .style("display", [4,5].includes(scrollIndex) ? "block" : "none")
@@ -418,13 +418,13 @@
         // X Axis  
         svg.select(".x-axis")
             .transition()
-            .duration( scrollIndex === 5 ? blockTransitionTime : 0 )
+            .duration(((scrollIndex === 5 && scrollDirection === "down") || (scrollIndex === 4 && scrollDirection === "up")) ? blockTransitionTime : 0 )
             .call(xAxis);
         
         // Y Axis
         svg.select(".y-axis")
             .transition()
-            .duration( scrollIndex === 5 ? blockTransitionTime : 0 )
+            .duration(((scrollIndex === 5 && scrollDirection === "down") || (scrollIndex === 4 && scrollDirection === "up")) ? blockTransitionTime : 0 )
             .call(yAxis);
 
     }
@@ -515,13 +515,13 @@
             .transition("slide-in")
             .delay((d, i) => i*2000)
             .duration(1200)
-                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*150 - 100 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
+                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*50 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
                 .attr("y", d => d.name === "Mt. Everest" ? height - padding.vertical - heightScale(+d.height) : height - padding.vertical - heightScaleZoom(+d.height))
                 .attr("height", d => d.name === "Mt. Everest" ? heightScale(+d.height) : heightScaleZoom(+d.height))
             .transition("re-scale")
             .delay((d, i) => 1000-(i*1000))
             .duration(1000)
-                .attr("x", (d,i) => padding.horizontal + (i+1)*150 - 100)
+                .attr("x", (d,i) => padding.horizontal + (i+1)*50)
                 .attr("y", d => height - padding.vertical - heightScale(+d.height))
                 .attr("height", d => heightScale(+d.height))
 
@@ -561,16 +561,6 @@
             font-size: 0.8rem;
         }
     }
-
-    /* .angle-tip, .axis-label {
-        font-size: 0.9rem;      
-    }
-
-    @media only screen and (max-width: 700px) {
-        :global(.angle-tip, .axis-label) {
-            font-size: 0.8rem;
-        }
-    } */
 
     /* .step-image {
         min-width: 100px;
