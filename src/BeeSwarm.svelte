@@ -272,9 +272,10 @@
     $: xAxis = d3.axisBottom()
         .scale(xAxisScale)
         .tickFormat(d3.format("d"))
-        // .ticks(5);
+        .ticks(4);
     $: yAxis = d3.axisLeft()
         .scale(yAxisScale)
+        .tickFormat(d3.format("d"))
         .ticks(4);
 
     $: d3.select(".population-chart").style("display", scrollIndex === 3 ? "block" : "none");   
@@ -506,15 +507,15 @@
             .transition("slide-in")
             .delay((d, i) => i*2000)
             .duration(1200)
-            .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*150 - 100 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
-            .attr("y", d => d.name === "Mt. Everest" ? height - padding.vertical - heightScale(+d.height) : height - padding.vertical - heightScaleZoom(+d.height))
-            .attr("height", d => d.name === "Mt. Everest" ? heightScale(+d.height) : heightScaleZoom(+d.height))
+                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*150 - 100 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
+                .attr("y", d => d.name === "Mt. Everest" ? height - padding.vertical - heightScale(+d.height) : height - padding.vertical - heightScaleZoom(+d.height))
+                .attr("height", d => d.name === "Mt. Everest" ? heightScale(+d.height) : heightScaleZoom(+d.height))
             .transition("re-scale")
             .delay((d, i) => 1000-(i*1000))
             .duration(1000)
-            .attr("x", (d,i) => padding.horizontal + (i+1)*150 - 100)
-            .attr("y", d => height - padding.vertical - heightScale(+d.height))
-            .attr("height", d => heightScale(+d.height))
+                .attr("x", (d,i) => padding.horizontal + (i+1)*150 - 100)
+                .attr("y", d => height - padding.vertical - heightScale(+d.height))
+                .attr("height", d => heightScale(+d.height))
 
 
     }
