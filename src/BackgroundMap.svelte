@@ -4,6 +4,8 @@
 	import { coordinates, scroll } from './state';
 
 	export let bounds;
+	export let visibleIndex;
+	export let mapStyle;
 
 	let container;
 	let map;
@@ -20,7 +22,7 @@
 		link.onload = () => {
 			map = new mapbox.Map({
 				container,
-				style: 'mapbox://styles/mapbox/light-v10',
+				style: mapStyle,
 				center: [0, 0],
 				zoom: 9
 			});
@@ -36,6 +38,8 @@
 			link.parentNode.removeChild(link);
 		};
 	});
+
+	// $: if (map) { map.style = scrollIndex === 1 ? 'mapbox://styles/mapbox/light-v10' : 'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y' };
 
 	const handleResize = () => {
 		mapBounds = map.getBounds();
@@ -67,7 +71,7 @@
 
 <svelte:window on:resize={handleResize}/>
 
-<div style="opacity: {scrollIndex === 1 ? 1 : 0}" bind:this={container}>
+<div style="opacity: {scrollIndex === visibleIndex ? 1 : 0}" bind:this={container}>
 	{#if map}
 		<slot></slot>
 	{/if}

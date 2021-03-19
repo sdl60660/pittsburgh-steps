@@ -13,12 +13,13 @@
 
     const promises = [
         d3.csv("data/pittsburgh_steps.csv"),
-        d3.csv("data/pittsburgh_population.csv")
+        d3.csv("data/pittsburgh_population.csv"),
+        d3.csv("data/image_data.csv")
     ];
 
 
     let dataLoad = Promise.all(promises).then(data => {
-        data[0] = data[0].map(item => {
+        data[0] = data[0].sort((a,b) => a.number_of_steps - b.number_of_steps).map(item => {
             const year = item.installed === "" ? "" : +item.installed.slice(0,4);
             const yearIndex = yearIndexMap.has(year) ? (yearIndexMap.get(year) + 1) : 0;
             yearIndexMap.set(year, yearIndex);
@@ -108,13 +109,14 @@
         {#await dataLoad}
             <p>Loading data...</p>
         {:then data}
-            <BackgroundMap bounds={getDataBounds(data[0])}/>
-            <BeeSwarm stepsData={data[0]} populationData={data[1]} />
+            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
+            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} mapStyle={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}/>
+            <BeeSwarm stepsData={data[0]} populationData={data[1]} imageData={data[2]} />
         {/await}
     </figure>
 
     <article>
-        {#each [1,2,3,4,5,6,7] as index (index)}
+        {#each [...Array(8).keys()] as index (index)}
             <div class="step">{index}</div>
         {/each}
     </article>
