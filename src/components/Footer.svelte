@@ -16,6 +16,7 @@
     }
     @media screen and (max-width: 700px) {
         .footer {
+            min-height: 90vh;
             max-width: 75vw;
         }
     }
@@ -29,9 +30,9 @@
     }
 
     .icon-img {
-        height: 13px;
-        width: 13px;
-        padding: 5px 2px 0px 2px;
+        height: 14px;
+        width: 14px;
+        padding: 0px 2px;
         fill: white;
     }
 
@@ -48,10 +49,10 @@
 <div class={"footer"}>
     <hr />
     <div class="footer__section">
-        <p><strong>Visualization by <a target="_blank" href="https://www.samlearner.com">Sam Learner</a></strong> |&nbsp;
-            <a target="_blank" href="mailto:learnersd@gmail.com"><img class="icon-img" src="/images/email.svg" alt="email link"/></a> |&nbsp;
-            <a target="_blank" href="https://twitter.com/sam_learner"><img class="icon-img" src="/images/twitter.svg" alt="twitter link"/></a> |&nbsp;
-            <a target="_blank" href="https://github.com/sdl60660"><img class="icon-img" src="/images/github.png" alt="github link"/></a>
+        <p><strong>Visualization by <a target="_blank" href="https://www.samlearner.com">Sam Learner</a></strong> |
+            <a target="_blank" href="mailto:learnersd@gmail.com"><img class="icon-img" src="/images/email.svg" alt="email link"/></a> |
+            <a target="_blank" href="https://twitter.com/sam_learner"><img class="icon-img" src="/images/twitter.svg" alt="twitter link"/></a> |
+            <a target="_blank" href="https://github.com/sdl60660"><img class="icon-img" src="/images/github.svg" alt="github link"/></a>
         </p>
         <p>Code and data for this project lives <a target="_blank" href={githubLink}>here</a>.</p> 
     </div>
