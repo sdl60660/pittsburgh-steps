@@ -14,7 +14,7 @@
         width: 50rem;
         max-width: 55vw;  
     }
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 900px) {
         .footer {
             min-height: 90vh;
             max-width: 75vw;

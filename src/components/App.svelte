@@ -11,17 +11,20 @@
     import BackgroundMap from './BackgroundMap.svelte';
     import Header from './Header.svelte';
     import Footer from './Footer.svelte';
+
+    import annotations from '../../public/data/annotation_text.json';
     
     let yearIndexMap = new Map();
 
-    const promises = [
+    // let annotationLoad = d3.json("data/annotation_text.json");
+
+    const dataFilePromises = [
         d3.csv("data/pittsburgh_steps.csv"),
         d3.csv("data/pittsburgh_population.csv"),
         d3.csv("data/image_data.csv")
     ];
 
-
-    let dataLoad = Promise.all(promises).then(data => {
+    let dataLoad = Promise.all(dataFilePromises).then(data => {
         data[0] = data[0].sort((a,b) => a.number_of_steps - b.number_of_steps).map(item => {
             const year = item.installed === "" ? "" : +item.installed.slice(0,4);
             const yearIndex = yearIndexMap.has(year) ? (yearIndexMap.get(year) + 1) : 0;
@@ -56,7 +59,7 @@
         scroller
             .setup({
                 step: ".step",
-                offset: 0.9,
+                offset: 0.8,
                 progress: false,
                 // threshold: 4
             })
@@ -99,7 +102,7 @@
         margin: 0 10rem 0 0;
     }
 
-    @media screen and (max-width: 700px) {
+    @media screen and (max-width: 900px) {
         article {
             position: relative;
             padding: 0;
@@ -116,7 +119,8 @@
         border: 1px solid black;
     }
 
-    @media screen and (min-width: 700px) {
+
+    @media screen and (min-width: 900px) {
         .step {
             border-radius: unset;
             border-top-right-radius: 5px;
@@ -127,9 +131,23 @@
     }
 
     .step.phantom {
-        margin-bottom: 0;
+        height: 0;
+        width: 0;
         opacity: 0;
     }
+
+    .step:last-of-type {
+        margin-bottom: 0;
+    }
+
+    /* .step:first-of-type {
+        background-color: red;
+        margin-top: -50vh;
+        border: unset;
+        border-radius: 5px;
+        margin-left: 50vw;
+        transform: translateX(-50%);
+    } */
 
     .footer-section {
         background-color: #333;
@@ -152,8 +170,10 @@
     </figure>
 
     <article>
-        {#each [...Array(8).keys()] as index, i}
-            <div class="step" class:phantom={i === 7} key={i}>{index}</div>
+        {#each annotations as { text }, i}
+            <div class="step" class:phantom={i === 0 || i === (annotations.length - 1)} key={i}>
+                {text}
+            </div>
         {/each}
     </article>
 </section>
