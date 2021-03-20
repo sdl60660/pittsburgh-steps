@@ -26,7 +26,7 @@
     let selectedName = "";
     $: labelSize = width < mobileBreakpoint ? "0.8rem" : "0.9rem";
     $: imageSize = width < mobileBreakpoint ? 75 : 125;
-    $: blockSize = width < mobileBreakpoint ? 3 : 7;
+    $: blockSize = width < mobileBreakpoint ? 4 : 7;
 
     stepsData = stepsData.sort((a, b) => +a.id - +b.id).sort((a, b) => a.image === "" ? 1 : b.image === "" ? -1 : 0 )
     let usableChartData = stepsData
@@ -62,7 +62,6 @@
         .y(d => timeY(d.population))
 
     $: padding = { horizontal: width < mobileBreakpoint ? 45 : width / 8, vertical: width < mobileBreakpoint ? height / 5 : height / 10 };
-    $: shorterEdge = Math.min(height, width)
     $: shorterAxisLength = Math.min(height - (padding.vertical*2), width - (padding.horizontal*2))
 
     $: scatterX = scrollIndex === 4 ? 
@@ -120,10 +119,6 @@
     $: timeY = d3.scaleLinear()
         .domain([0, d3.max(populationData, item => item.population)])
         .range([ height-padding.vertical, padding.vertical ])
-
-    // $: dummyYScale = d3.scaleLinear()
-    //                     .domain([0,1000])
-    //                     .range([height - padding.vertical, height - padding.vertical])
 
     const colorScale = d3.scaleLinear()
         .domain(d3.extent(usableChartData, d => heightAccessor(d) / +d.length))
@@ -310,6 +305,8 @@
             .attr("y", (d, i) => {
                 return imageSize * ( i % rows);
             })
+            .attr("rx", 0)
+            .attr("ry", 0)
             .style("opacity", 1.0)
             .transition()
             .duration(0)
@@ -338,6 +335,8 @@
             .attr("y", d => geoY(d.latitude) - 3.5)
             .attr("width", blockSize)
             .attr("height", blockSize)
+            .attr("rx", blockSize / 2)
+            .attr("ry", blockSize / 2)
             .style('opacity', 0.7)
             // .transition()
             // .duration(0)
@@ -355,13 +354,15 @@
             .style("opacity", d => d.year_built !== "" ? 0.7 : 0.0)
             .transition()
                 .duration(blockTransitionTime)
+                .attr("rx", 0)
+                .attr("ry", 0)
                 .style("fill", d => stepsColorScale(+d.number_of_steps))
                 // .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)))
-                .attr("width", blockSize)
-                .attr("height", width < mobileBreakpoint ? blockSize*2 : blockSize)
+                .attr("width", width < mobileBreakpoint ? 3 : blockSize)
+                .attr("height", width < mobileBreakpoint ? blockSize*1.5 : blockSize)
                 .attr("x", d => d.year_built === "" ? width / 2 : timeX(d.year_built))
                 // .attr("y", d => timeY(d.year_index))
-                .attr("y", d => d.year_built === "" ? height - padding.vertical - 10 : height - padding.vertical - (d.year_index)*(width < mobileBreakpoint ? blockSize*2 : blockSize))
+                .attr("y", d => d.year_built === "" ? height - padding.vertical - 10 : height - padding.vertical - (d.year_index)*(width < mobileBreakpoint ? blockSize*1.5 : blockSize))
         
         svg.select(".population-chart").selectAll(".population-line")
             .data([populationData])
