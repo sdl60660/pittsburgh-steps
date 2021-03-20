@@ -1,7 +1,7 @@
 <script>
 	import { onMount, setContext } from 'svelte';
-	import { mapbox } from './mapbox.js';
-	import { coordinates, scroll } from './state';
+	import { mapbox } from '../mapbox.js';
+	import { coordinates, scroll } from '../state';
 
 	export let bounds;
 	export let visibleIndex;

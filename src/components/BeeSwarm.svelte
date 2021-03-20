@@ -2,8 +2,8 @@
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
 
-    import { coordinates, scroll } from './state.js';
-    import { lineTransition } from './utils'
+    import { coordinates, scroll } from '../state.js';
+    import { lineTransition } from '../utils'
 
 
     export let stepsData;
@@ -66,7 +66,7 @@
         .x(d => timeX(d.year))
         .y(d => timeY(d.population))
 
-    $: padding = { horizontal: width < mobileBreakpoint ? 42 : width / 6, vertical: width < mobileBreakpoint ? height / 5 : height / 8 };
+    $: padding = { horizontal: width < mobileBreakpoint ? 42 : width / 6, vertical: width < mobileBreakpoint ? height / 5 : height / 10 };
     $: shorterEdge = Math.min(height, width)
     $: shorterAxisLength = Math.min(height - (padding.vertical*2), width - (padding.horizontal*2))
 
@@ -249,7 +249,7 @@
 
     $: d3.select(".y-axis")
         .attr("transform", `translate(${padding.horizontal}, 0)`)
-        .style("display", [4,5,6].includes(scrollIndex) ? "block" : "none");
+        .style("display", [4,5,6,7].includes(scrollIndex) ? "block" : "none");
     $: d3.select(".x-axis")
         .attr("transform", `translate(0, ${height - padding.vertical + 10})`)
         .style("display", [3,4,5].includes(scrollIndex) ? "block" : "none");
@@ -287,7 +287,7 @@
     $: d3.select(".population-chart").style("display", scrollIndex === 3 ? "block" : "none");   
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
     $: d3.selectAll(".label").style("font-size", labelSize);
-    $: d3.selectAll(".comparison-image").style("display", scrollIndex === 6 ? "block" : "none")
+    $: d3.selectAll(".comparison-image").style("display", scrollIndex === 6 || scrollIndex === 7 ? "block" : "none")
     
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
@@ -473,7 +473,7 @@
     }
  
     let totalHeight = 0;
-    $: if (scrollIndex === 6) {
+    $: if (scrollIndex === 6 && scrollDirection === "down") {
         const svg = d3.select(viz);
 
         // Y Axis
@@ -513,10 +513,10 @@
                     return stepY;
                 })
 
-        const marginMultiplier = width < mobileBreakpoint ? 25 : 50;
+        const marginMultiplier = width < mobileBreakpoint ? 25 : 75;
         svg.selectAll(".comparison-image")
             .attr("y", d => height - padding.vertical - heightScaleZoom(+d.height))
-            .attr("x", width + 100)
+            .attr("x", width)
             .attr("height", d => heightScaleZoom(+d.height))
             .transition("slide-in")
             .delay((d, i) => i*2000)

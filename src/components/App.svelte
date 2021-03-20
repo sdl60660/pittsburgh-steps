@@ -5,10 +5,12 @@
     // import moment from 'moment';
     // import "intersection-observer";
 
-    import { scroll } from './state';
+    import { scroll } from '../state';
     import BeeSwarm from './BeeSwarm.svelte';
     import Loader from './Loader.svelte';
     import BackgroundMap from './BackgroundMap.svelte';
+    import Header from './Header.svelte';
+    import Footer from './Footer.svelte';
     
     let yearIndexMap = new Map();
 
@@ -123,9 +125,21 @@
             border-left: 3px solid black;
         }
     }
+
+    .step.phantom {
+        margin-bottom: 0;
+        opacity: 0;
+    }
+
+    .footer-section {
+        background-color: #333;
+        color: #f9f9f9;
+    }
 </style>
 
 <svelte:window on:resize={() => { scroller.resize() } }/>
+
+<Header />
 <section class="wrapper">
     <figure>
         {#await dataLoad}
@@ -138,8 +152,11 @@
     </figure>
 
     <article>
-        {#each [...Array(8).keys()] as index (index)}
-            <div class="step">{index}</div>
+        {#each [...Array(8).keys()] as index, i}
+            <div class="step" class:phantom={i === 7} key={i}>{index}</div>
         {/each}
     </article>
+</section>
+<section class="footer-section">
+    <Footer githubLink={"https://github.com/sdl60660/pittsburgh-steps"}/>
 </section>
