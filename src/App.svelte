@@ -92,17 +92,36 @@
 
     article {
         position: relative;
-        padding: 0;
+        padding-left: 0.5rem;
         max-width: 20rem;
         margin: 0 10rem 0 0;
     }
 
+    @media screen and (max-width: 700px) {
+        article {
+            position: relative;
+            padding: 0;
+            max-width: 20rem;
+            margin: 0 1rem 0 auto;
+        }
+    }
+
     .step {
-        padding: 0.5rem;
+        padding: 1rem 1rem;
         margin: 0 auto 100vh auto;
         background-color: rgba(255,255,255,0.9);
-        border-radius: 10px;
+        border-radius: 5px;
         border: 1px solid black;
+    }
+
+    @media screen and (min-width: 700px) {
+        .step {
+            border-radius: unset;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border: unset;
+            border-left: 3px solid black;
+        }
     }
 </style>
 

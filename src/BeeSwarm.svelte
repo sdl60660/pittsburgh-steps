@@ -42,7 +42,7 @@
 
     const heightAccessor = d => +d.number_of_steps*(7.5 / 12);
     const totalLength = stepsData.map(d => parseInt(d.length)).filter(d => ! isNaN(d)).reduce((a, b) => a + b, 0);
-    const totalStepsHeight = usableChartData.map(d => heightAccessor(d)).reduce((a, b) => a + b, 0);
+    const totalStepsHeight = stepsData.filter(d => d.number_of_steps > 0).map(d => heightAccessor(d)).reduce((a, b) => a + b, 0);
 
     const sortedGrades = usableChartData.filter(d => d.length > 40 && d.number_of_steps > 4).sort((a, b) => (heightAccessor(b) / +b.length) - (heightAccessor(a) / +a.length))
     const angleGradeData = [sortedGrades.find(d => d.id === "182210601"), sortedGrades[0]]
@@ -492,7 +492,7 @@
                 .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)))
                 .attr("width", d => heightScaleZoom(d.length))
                 .attr("height", d => heightScaleZoom(heightAccessor(d)))
-                .attr("x", padding.horizontal)
+                .attr("x", padding.horizontal + 3)
                 .attr("y", (d, i) => {
                     const stepY = height - padding.vertical - heightScaleZoom(heightAccessor(d)) - heightScaleZoom(totalHeight);
                     totalHeight = i === 0 ? heightAccessor(d) : totalHeight + heightAccessor(d);
