@@ -7,6 +7,7 @@
 
     import { scroll } from './state';
     import BeeSwarm from './BeeSwarm.svelte';
+    import Loader from './Loader.svelte';
     import BackgroundMap from './BackgroundMap.svelte';
     
     let yearIndexMap = new Map();
@@ -97,9 +98,11 @@
     }
 
     .step {
-        padding: 2rem;
+        padding: 0.5rem;
         margin: 0 auto 100vh auto;
-        background-color: rgba(0,0,0,0.2);
+        background-color: rgba(255,255,255,0.9);
+        border-radius: 10px;
+        border: 1px solid black;
     }
 </style>
 
@@ -107,7 +110,7 @@
 <section class="wrapper">
     <figure>
         {#await dataLoad}
-            <p>Loading data...</p>
+            <Loader />
         {:then data}
             <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
             <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} mapStyle={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}/>

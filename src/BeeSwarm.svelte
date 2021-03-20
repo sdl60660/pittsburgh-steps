@@ -509,6 +509,7 @@
                     return stepY;
                 })
 
+        const marginMultiplier = width < mobileBreakpoint ? 25 : 50;
         svg.selectAll(".comparison-image")
             .attr("y", d => height - padding.vertical - heightScaleZoom(+d.height))
             .attr("x", width + 100)
@@ -516,13 +517,13 @@
             .transition("slide-in")
             .delay((d, i) => i*2000)
             .duration(1200)
-                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*25 : padding.horizontal + heightZoomFactor*((i+1)*150 - 100))
+                .attr("x", (d,i) => d.name === "Mt. Everest" ? padding.horizontal + (i+1)*marginMultiplier : padding.horizontal + heightZoomFactor*(i+1)*marginMultiplier)
                 .attr("y", d => d.name === "Mt. Everest" ? height - padding.vertical - heightScale(+d.height) : height - padding.vertical - heightScaleZoom(+d.height))
                 .attr("height", d => d.name === "Mt. Everest" ? heightScale(+d.height) : heightScaleZoom(+d.height))
             .transition("re-scale")
             .delay((d, i) => 1000-(i*1000))
             .duration(1000)
-                .attr("x", (d,i) => padding.horizontal + (i+1)*25)
+                .attr("x", (d,i) => padding.horizontal + (i+1)*marginMultiplier)
                 .attr("y", d => height - padding.vertical - heightScale(+d.height))
                 .attr("height", d => heightScale(+d.height))
 
