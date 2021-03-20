@@ -121,6 +121,10 @@
         .domain([0, d3.max(populationData, item => item.population)])
         .range([ height-padding.vertical, padding.vertical ])
 
+    // $: dummyYScale = d3.scaleLinear()
+    //                     .domain([0,1000])
+    //                     .range([height - padding.vertical, height - padding.vertical])
+
     const colorScale = d3.scaleLinear()
         .domain(d3.extent(usableChartData, d => heightAccessor(d) / +d.length))
         .range(["yellow", "red"])
@@ -407,15 +411,16 @@
         
         // Y Axis
         svg.select(".y-axis")
+            // .call(d3.axisLeft().scale(dummyYScale).ticks(0))
             .transition()
-            .duration(((scrollIndex === 5 && scrollDirection === "down") || (scrollIndex === 4 && scrollDirection === "up")) ? blockTransitionTime : 0 )
+            .duration((scrollIndex === 5 && scrollDirection === "up") ? 0 : blockTransitionTime)
             .call(yAxis);
 
     }
 
     $: if (scrollIndex === 5) {
         const svg = d3.select(viz);
-        const lineEndLength = width > mobileBreakpoint ? 1250 : 1100;
+        const lineEndLength = width > mobileBreakpoint ? 1250 : 1025;
 
         svg.selectAll(".angle-line")
             .attr("x1", scatterX(0))
@@ -496,7 +501,7 @@
                     return stepY;
                 })
 
-        const marginMultiplier = width < mobileBreakpoint ? 25 : 75;
+        const marginMultiplier = width < mobileBreakpoint ? width / 10 : width / 10;
         svg.selectAll(".comparison-image")
             .attr("y", d => height - padding.vertical - heightScaleZoom(+d.height))
             .attr("x", width)

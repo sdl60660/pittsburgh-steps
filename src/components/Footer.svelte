@@ -5,8 +5,8 @@
 <style>
     .footer {
         font-size: 0.8rem;
-        padding-top: 2rem;
-        padding-bottom: 4rem;
+        padding-top: 3rem;
+        padding-bottom: 3rem;
         min-height: 10vh;
         font-family: "Helvetica Neue", helvetica, arial, sans-serif;
         margin: 0 auto 0 auto;
@@ -16,7 +16,7 @@
     }
     @media screen and (max-width: 900px) {
         .footer {
-            min-height: 90vh;
+            min-height: calc(100vh - 6rem);
             max-width: 75vw;
         }
     }
