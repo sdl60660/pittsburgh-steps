@@ -115,8 +115,8 @@
         .range([height - padding.vertical, padding.vertical])
     
     $: yAxisHeightZoomScale = d3.scaleLinear()
-        .domain([0, (totalStepsHeight / heightZoomFactor)])
-        .range([height - padding.vertical, padding.vertical])
+        .domain([0, 2*(totalStepsHeight / heightZoomFactor)])
+        .range([height - padding.vertical, padding.vertical - height])
 
     $: timeX = d3.scaleLinear()
         .domain(d3.extent(populationData, item => item.year))
@@ -279,9 +279,10 @@
         .ticks(4);
     $: yAxis = d3.axisLeft()
         .scale(yAxisScale)
-        .tickFormat(d3.format("d"))
-        .ticks(scrollIndex === 6 ? 1 : 4)
-        .tickValues(scrollIndex === 6 ? [3000] : null)
+        .tickFormat(d3.format(","))
+        .ticks(4)
+        // .ticks(scrollIndex === 6 ? 1 : 4)
+        // .tickValues(scrollIndex === 6 ? [3000] : null)
 
     $: d3.select(".population-chart").style("display", scrollIndex === 3 ? "block" : "none");   
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
@@ -483,7 +484,10 @@
             .delay(2000)
             .duration(1000)
             .call(d3.axisLeft()
-                .scale(yAxisHeightScale).ticks(1));
+                .scale(yAxisHeightScale)
+                .tickFormat(d3.format(","))
+                // .ticks(1)
+            );
         
         svg.selectAll(".step-marker")
             .style("display", d => d.number_of_steps !== "" ? "block" : "none")
