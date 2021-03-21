@@ -399,6 +399,8 @@
 
         svg.selectAll(".step-marker")
             .style("display", d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "" ? "block" : "none")
+            .attr("rx", 0)
+            .attr("ry", 0)
             .transition()
             .duration(blockTransitionTime)
             .style("fill", d => colorScale(heightAccessor(d) / parseInt(d.length)))

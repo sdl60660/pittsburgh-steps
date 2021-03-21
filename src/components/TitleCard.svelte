@@ -11,12 +11,12 @@ import App from "./App.svelte";
         left: 50%;
         transform: translate(-50%, -50%);
         padding: 1rem 2rem;
-        background-color: rgba(255, 255, 255, 0.8);
+        background-color: rgba(255, 255, 255, 0.88);
         border-radius: 5px;
         z-index: 100;
         width: 35rem;
         max-width: 80vw;
-        box-shadow: 5px 3px 3px rgba(80,80,80,0.5);
+        box-shadow: 5px 3px 3px rgba(80, 80, 80, 0.5);
     }
 
     .title-card__content h1 {
