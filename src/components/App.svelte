@@ -11,12 +11,11 @@
     import BackgroundMap from './BackgroundMap.svelte';
     import Header from './Header.svelte';
     import Footer from './Footer.svelte';
+    import TitleCard from './TitleCard.svelte';
 
     import annotations from '../../public/data/annotation_text.json';
     
     let yearIndexMap = new Map();
-
-    // let annotationLoad = d3.json("data/annotation_text.json");
 
     const dataFilePromises = [
         d3.csv("data/pittsburgh_steps.csv"),
@@ -97,8 +96,8 @@
 
     article {
         position: relative;
-        padding-left: 0.5rem;
-        max-width: 20rem;
+        padding-left: 1rem;
+        max-width: 25rem;
         margin: 0 10rem 0 0;
     }
 
@@ -107,7 +106,7 @@
             position: relative;
             padding: 0;
             max-width: 20rem;
-            margin: 0 1rem 0 auto;
+            margin: 0 auto 0 auto;
         }
     }
 
@@ -115,8 +114,9 @@
         padding: 1rem 1rem;
         margin: 0 auto 100vh auto;
         background-color: rgba(255,255,255,0.9);
-        border-radius: 5px;
-        border: 1px solid black;
+        border-radius: 3px;
+        /* border: 1px solid black; */
+        box-shadow: 4px 3px 3px rgba(80,80,80,0.5);
     }
 
 
@@ -140,6 +140,10 @@
         margin-bottom: 0;
     }
 
+    .step p {
+        margin: 0 !important;
+    }
+
     /* .step:first-of-type {
         background-color: red;
         margin-top: -50vh;
@@ -153,18 +157,27 @@
         background-color: #333;
         color: #f9f9f9;
     }
+
 </style>
 
 <svelte:window on:resize={() => { scroller.resize() } }/>
 
-<Header />
+<!-- <Header /> -->
+{#await dataLoad}
+    <div />
+{:then data}
+    <TitleCard />
+{/await}
 <section class="wrapper">
     <figure>
         {#await dataLoad}
             <Loader />
         {:then data}
-            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
-            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} mapStyle={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}/>
+            <!-- <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} addTopo={false} mapStyle={'mapbox://styles/mapbox/light-v10'}/> -->
+            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} addTopo={true} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
+
+            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} addTopo={true} mapStyle={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}/>
+            <!-- <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} mapStyle={'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g'}/> -->
             <BeeSwarm stepsData={data[0]} populationData={data[1]} imageData={data[2]} />
         {/await}
     </figure>
@@ -172,7 +185,7 @@
     <article>
         {#each annotations as { text }, i}
             <div class="step" class:phantom={i === 0 || i === (annotations.length - 1)} key={i}>
-                {text}
+                <p>{text}</p>
             </div>
         {/each}
     </article>

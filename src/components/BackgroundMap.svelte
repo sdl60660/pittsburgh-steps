@@ -6,6 +6,7 @@
 	export let bounds;
 	export let visibleIndex;
 	export let mapStyle;
+	export let addTopo;
 
 	let container;
 	let map;
@@ -29,6 +30,26 @@
 			map.scrollZoom.disable();
 			map.fitBounds(bounds, { animate: false, padding: 10 });
 			mapBounds = map.getBounds();
+
+			if (addTopo) {
+				map.on('load', () => {
+					map.addSource('dem', {
+						'type': 'raster-dem',
+						'url': 'mapbox://mapbox.terrain-rgb'
+					});
+					map.addLayer(
+						{
+							'id': 'hillshading',
+							'source': 'dem',
+							'type': 'hillshade',
+							'hillshade-exaggeration': 0.8
+							// insert below waterway-river-canal-shadow;
+							// where hillshading sits in the Mapbox Outdoors style
+						}
+						// 'waterway-river-canal-shadow'
+					);
+				});
+			}
 		};
 
 		document.head.appendChild(link);

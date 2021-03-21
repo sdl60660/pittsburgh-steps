@@ -24,7 +24,6 @@
     let tooltipVisible = false;
     let selectedImage = "";
     let selectedName = "";
-    $: labelSize = width < mobileBreakpoint ? "0.8rem" : "0.9rem";
     $: imageSize = width < mobileBreakpoint ? 75 : 125;
     $: blockSize = width < mobileBreakpoint ? 4 : 7;
 
@@ -41,7 +40,8 @@
     const totalStepsHeight = stepsData.filter(d => d.number_of_steps > 0).map(d => heightAccessor(d)).reduce((a, b) => a + b, 0);
 
     const sortedGrades = usableChartData.filter(d => d.length > 40 && d.number_of_steps > 4).sort((a, b) => (heightAccessor(b) / +b.length) - (heightAccessor(a) / +a.length))
-    const angleGradeData = [sortedGrades.find(d => d.id === "182210601"), sortedGrades[0]]
+    const angleGradeData = [sortedGrades.find(d => d.id === "182210601"), sortedGrades[0]];
+    const populationExamples = [populationData[populationData.length-1], populationData.slice().sort((a,b) => b.population - a.population)[0]];
     
     const unsubscribeCoordinates = coordinates.subscribe(coords => {
         if (coords) {
@@ -89,10 +89,6 @@
     $: geoX = d3.scaleLinear()
         .domain(longitudeBounds)
         .range([0, width])
-
-    // $: heightScale = d3.scaleLinear()
-    //     .domain([0, totalStepsHeight])
-    //     .range([0, height * 10])
     
     const heightZoomFactor = 5;
     $: heightScaleZoom = d3.scaleLinear()
@@ -177,24 +173,32 @@
         svg.append("g")
             .attr("class", "x-axis axis");
 
-        svg.append("g")
+        const populationChart = svg.append("g")
             .attr("class", "population-chart")
-            .append("text")
-                .attr("class", "population-label label")
-                // .style("font-size", labelSize)
-                .style("text-anchor", "end")
-                .style("fill", "steelblue")
-                .text("Population of Pittsburgh")
+        
+        populationChart.append("text")
+            .attr("class", "population-label label")
+            .style("text-anchor", "end")
+            .style("fill", "steelblue")
+            .style("font-weight", "bold")
+            .text("Population of Pittsburgh")
+            
+        populationChart.selectAll(".population-tip")
+            .data(populationExamples)
+            .join("text")
+            .attr("class", "population-tip")
+            .style("text-anchor", (d,i) => i === 0 && width > mobileBreakpoint ? "end" : "middle")
+            .style("font-size", "0.75rem")
+            .style("fill", "steelblue")
+            .text(d => d3.format(",")(d.population))
         
         svg.append("text")
             .attr("class", "x-axis-label axis-label label")
-            // .style("font-size", labelSize)
             .style("text-anchor", "middle")
             .style("fill", "#333333")
         
         svg.append("text")
             .attr("class", "y-axis-label axis-label label")
-            // .style("font-size", labelSize)
             .style("text-anchor", "start")
             .style("fill", "#333333")
 
@@ -211,7 +215,6 @@
             .join("text")
             .attr("class", "angle-tip angle-feature label")
             .attr("fill", "#333")
-            // .style("font-size", labelSize)
             .style("text-anchor", "middle")
             .text(d => `${d3.format(".0%")(1.0*heightAccessor(d) / d.length)} grade`)
             .style("display", "none")
@@ -237,9 +240,6 @@
             .attr("class", "comparison-image")
             .attr("xlink:href", d => width < mobileBreakpoint ? d.mobile_image_link : d.image_link)
             .attr("x", width)
-
-        // svg.call(zoom);
-
     })
 
     $: d3.select(".y-axis")
@@ -263,7 +263,6 @@
         .attr("y", scatterY.range()[1] + (width < mobileBreakpoint ? 10 : 10))
         .style("display", [4,5].includes(scrollIndex) ? "block" : "none")
         .text(scrollIndex === 4 ? "Number of Steps" : "Height of Staircase (feet)")
-    $: d3.selectAll(".label").style("font-size", labelSize)
 
 
     $: xAxisScale = scrollIndex === 3 ? timeX : scatterX;
@@ -281,7 +280,6 @@
 
     $: d3.select(".population-chart").style("display", scrollIndex === 3 ? "block" : "none");   
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
-    $: d3.selectAll(".label").style("font-size", labelSize);
     $: d3.selectAll(".comparison-image").style("display", scrollIndex === 6 || scrollIndex === 7 ? "block" : "none")
     $: d3.selectAll(".step-image").style("opacity", scrollIndex > 1 ? 1.0 : 0.7);
 
@@ -310,10 +308,8 @@
             .style("opacity", 1.0)
             .transition()
             .duration(0)
-            .style("fill", d => `url(#${d.id})`)
-                
+            .style("fill", d => `url(#${d.id})`)    
     }
-
 
     $: if (scrollIndex === 1 || scrollIndex === 2) {
         const svg = d3.select(viz);
@@ -379,10 +375,18 @@
         svg.select(".population-label")
             .style("opacity", 0.0)
             .attr("x", timeX(populationData.reverse()[0].year))
-            .attr("y", timeY(populationData.reverse()[0].population) + 45)
+            .attr("y", timeY(populationData.reverse()[0].population) + 50)
             .transition()
             .delay(blockTransitionTime)
             .style("opacity", 1.0)
+        
+        svg.selectAll(".population-tip")
+            .style("opacity", 0.0)
+            .attr("x", d => timeX(d.year))
+            .attr("y", d => timeY(d.population) - 15)
+            .transition()
+            .delay(blockTransitionTime + 500)
+            .style("opacity", 1.0);
         
         // X Axis  
         svg.select(".x-axis")
@@ -447,8 +451,8 @@
         svg.selectAll(".angle-tip")
             .style("opacity", 0)
             .attr("transform", d => {
-                const translateX = scatterX((d.length * (1000 / d.length)) / 2);
-                const translateY = scatterY((heightAccessor(d) * (1000 / d.length))/ 2) - 8;
+                const translateX = scatterX((d.length * (lineEndLength / d.length)) / 2);
+                const translateY = scatterY((heightAccessor(d) * (lineEndLength / d.length))/ 2) - 8;
 
                 const slope = (1.0*heightAccessor(d) / d.length)
                 const rotationAngle =  -1*Math.atan(slope) / Math.PI * 180;
@@ -549,7 +553,8 @@
 
     :global(.label) {
         font-size: 0.9rem; 
-        font-family: "Atlas Grotesk Web", sans-serif;
+        font-family: 'Roboto', 'Inter'
+        /* font-family: "Atlas Grotesk Web", sans-serif; */
     }
     @media only screen and (max-width: 900px) {
         :global(.label) {

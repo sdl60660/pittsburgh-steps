@@ -59,7 +59,9 @@
 
     <div class="footer__section">
         <p><strong>Sources</strong></p>
-        <p>All step data comes from the WPRDC's <a target="_blank" href="https://data.wprdc.org/dataset/city-steps">City Steps dataset</a>, which in turn depended in part on University of Pittsburgh Professor Bob Regan's data collection efforts. Pittsburgh historical population numbers come from the census.</p>
+        <p>All step data comes from the WPRDC's <a target="_blank" href="https://data.wprdc.org/dataset/city-steps">City Steps dataset</a>, 
+            which in turn depended in part on University of Pittsburgh Professor Bob Regan's data collection efforts. Pittsburgh historical 
+            population numbers come from the U.S. Census.</p>
     </div>
     
     <div class="footer__section">
