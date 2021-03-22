@@ -122,11 +122,14 @@
         box-shadow: 4px 4px 3px rgba(80,80,80,0.5);
     }
 
+    .step.phantom:first-of-type {
+        margin-bottom: 60vh;
+    }
+
     .step.phantom {
         height: 0;
         width: 0;
         opacity: 0;
-        margin-bottom: 60vh;
     }
 
     @media screen and (min-width: 900px) {
@@ -138,7 +141,7 @@
             border-left: 3px solid black;
         }
 
-        .step.step.phantom {
+        .step.phantom:first-of-type {
             margin-bottom: 80vh;
         }
     }
