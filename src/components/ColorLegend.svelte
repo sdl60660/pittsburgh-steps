@@ -7,7 +7,7 @@
         scrollIndex = index;
     });
 
-    $: displayStyling = scrollIndex > 0 && scrollIndex < 6 ? "display: grid;" : "display: none;";
+    $: displayStyling = scrollIndex > 0 && scrollIndex < 6 && scrollIndex !== 3 ? "display: grid;" : "display: none;";
     $: legendTitle = scrollIndex < 4 ? "Staircase Height" : "Staircase Grade";
     $: legendLabels = scrollIndex < 4 ? ["Shorter", "Taller"] : ["Flatter", "Steeper"];
 
@@ -16,8 +16,8 @@
 <style>
     .legend {
         position: absolute;
-        top: 10%;
-        right: 10%;
+        top: 8%;
+        right: 8%;
         z-index: 100;
 
         background-color: rgba(255, 255, 255, 0.8);
@@ -37,6 +37,7 @@
 
     @media only screen and (max-width: 900px) {
         .legend {
+            top: 5%;
             left: 50%;
             transform: translateX(-50%);
         }

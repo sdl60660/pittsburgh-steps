@@ -48,8 +48,8 @@ import App from "./App.svelte";
             The steps are used for exercise and exploration, but also form the backbone 
             of many pedestrians' commutes to school or work, particularly in lower- and middle-income areas. 
             Along with more than 400 bridges, they make life possible in a city built into hills and rivers. 
-            Thanks to data collection efforts by author Bob Regan and a Citywide Steps Assessment undertaken 
-            by the city in 2017, the size, shape, condition, and history of these stairways is also well-documented.
+            Thanks to data collection efforts by professor Bob Regan and a Steps Assessment undertaken 
+            by the city in 2017, the size, shape, condition, and history of these stairways are also well-documented.
         </p>
     </div>
 </div>
