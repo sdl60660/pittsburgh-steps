@@ -12,6 +12,7 @@
     import Header from './Header.svelte';
     import Footer from './Footer.svelte';
     import TitleCard from './TitleCard.svelte';
+    import ColorLegend from './ColorLegend.svelte';
 
     import annotations from '../../public/data/annotation_text.json';
     
@@ -116,7 +117,7 @@
         background-color: rgba(255,255,255,0.9);
         border-radius: 3px;
         /* border: 1px solid black; */
-        box-shadow: 4px 3px 3px rgba(80,80,80,0.5);
+        box-shadow: 4px 4px 3px rgba(80,80,80,0.5);
     }
 
 
@@ -173,10 +174,10 @@
         {#await dataLoad}
             <Loader />
         {:then data}
+            <ColorLegend />
             <!-- <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} addTopo={false} mapStyle={'mapbox://styles/mapbox/light-v10'}/> -->
-            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} addTopo={true} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
-
             <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={1} addTopo={true} mapStyle={'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y'}/>
+            <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} addTopo={true} mapStyle={'mapbox://styles/mapbox/light-v10'}/>
             <!-- <BackgroundMap bounds={getDataBounds(data[0])} visibleIndex={2} mapStyle={'mapbox://styles/mapbox/cjaudgl840gn32rnrepcb9b9g'}/> -->
             <BeeSwarm stepsData={data[0]} populationData={data[1]} imageData={data[2]} />
         {/await}

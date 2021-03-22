@@ -43,10 +43,7 @@
 							'source': 'dem',
 							'type': 'hillshade',
 							'hillshade-exaggeration': 0.8
-							// insert below waterway-river-canal-shadow;
-							// where hillshading sits in the Mapbox Outdoors style
 						}
-						// 'waterway-river-canal-shadow'
 					);
 				});
 			}
@@ -59,8 +56,6 @@
 			link.parentNode.removeChild(link);
 		};
 	});
-
-	// $: if (map) { map.style = scrollIndex === 1 ? 'mapbox://styles/mapbox/light-v10' : 'mapbox://styles/mapbox-map-design/ckhqrf2tz0dt119ny6azh975y' };
 
 	const handleResize = () => {
 		mapBounds = map.getBounds();
