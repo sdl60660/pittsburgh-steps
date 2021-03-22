@@ -40,16 +40,17 @@ import App from "./App.svelte";
     <div class="title-card__content">
         <h1>Pittsburgh Steps</h1>
         <p>
-            There are more than 800 sets of public outdoor steps in Pittsburgh, the most of 
-            any city in the United States. These stairways help residents navigate the 
-            unusual urban landscape, moving along and between some of the steepest roads in the world.
+            There are more than 800 sets of public outdoor stairways in Pittsburgh, more than any other city 
+            in the United States. Along with more than 400 bridges, they make life possible in a city built 
+            into hills and rivers.
         </p>
         <p>
-            The steps are used for exercise and exploration, but also form the backbone 
-            of many pedestrians' commutes to school or work, particularly in lower- and middle-income areas. 
-            Along with more than 400 bridges, they make life possible in a city built into hills and rivers. 
-            Thanks to data collection efforts by professor Bob Regan and a Steps Assessment undertaken 
-            by the city in 2017, the size, shape, condition, and history of these stairways are also well-documented.
+            The steps are used for exercise and exploration, but also form the backbone of many pedestrians'
+             commutes to school or work, particularly in lower- and middle-income areas. These stairways help 
+             residents navigate the unusual urban landscape, moving along and between some of the steepest 
+             roads in the world. Thanks to data collection efforts by professor Bob Regan and a Steps Assessment 
+             undertaken by the city in 2017, the size, shape, condition, and history of these stairways is 
+             well-documented.
         </p>
     </div>
 </div>
