@@ -40,6 +40,18 @@ import App from "./App.svelte";
         }
     }
 
+    @media only screen and  (max-width: 375px) {
+        .title-card__content h1 {
+            font-size: 2rem;
+        }
+    }
+
+    @media only screen and  (max-width: 325px) {
+        .title-card__content h1 {
+            font-size: 1.7rem;
+        }
+    }
+
     @media only screen and  (max-height: 670px) {
         .title-card {
             max-width: 75vw;
