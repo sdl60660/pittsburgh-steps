@@ -54,7 +54,7 @@ import App from "./App.svelte";
         <h1>Pittsburgh Steps</h1>
         <p>
             There are more than 800 sets of public outdoor stairways in Pittsburgh, more than any other city 
-            in the United States. Along with more than 400 bridges, they make life possible in a city built 
+            in the United States. Along with over 400 bridges, they make life possible in a city built 
             into hills and rivers.
         </p>
         <p>
