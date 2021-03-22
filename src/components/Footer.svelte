@@ -17,7 +17,13 @@
     @media screen and (max-width: 900px) {
         .footer {
             min-height: calc(100vh - 6rem);
-            max-width: 80vw;
+            max-width: 83vw;
+        }
+    }
+
+    @media only screen and  (max-width: 360px) {
+        .footer p {
+            font-size: 12px;
         }
     }
 

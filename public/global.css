@@ -18,6 +18,13 @@ p {
 	font-family: 'Inter';
 }
 
+@media only screen and  (max-width: 360px) {
+	p {
+		font-size: 14px;
+	}
+}
+
+
 h1 {
 	font-family: 'Alegreya';
 	font-weight: bold;

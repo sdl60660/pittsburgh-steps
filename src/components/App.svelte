@@ -59,7 +59,7 @@
         scroller
             .setup({
                 step: ".step",
-                offset: 0.8,
+                offset: 1.0,
                 progress: false,
                 // threshold: 4
             })
@@ -112,8 +112,12 @@
     }
 
     .step {
+        margin: 0 auto 0 auto;
+        height: 100vh;
+    }
+
+    .card {
         padding: 1rem 1rem;
-        margin: 0 auto 100vh auto;
         background-color: rgba(255,255,255,0.9);
         border-radius: 3px;
         /* border: 1px solid black; */
@@ -122,7 +126,7 @@
 
 
     @media screen and (min-width: 900px) {
-        .step {
+        .card {
             border-radius: unset;
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
@@ -135,6 +139,7 @@
         height: 0;
         width: 0;
         opacity: 0;
+        margin-bottom: 60vh;
     }
 
     .step:last-of-type {
@@ -186,7 +191,9 @@
     <article>
         {#each annotations as { text }, i}
             <div class="step" class:phantom={i === 0 || i === (annotations.length - 1)} key={i}>
-                <p>{text}</p>
+                <div class="card">
+                    <p>{text}</p>
+                </div>
             </div>
         {/each}
     </article>

@@ -375,7 +375,7 @@
         svg.select(".population-label")
             .style("opacity", 0.0)
             .attr("x", timeX(populationData.reverse()[0].year))
-            .attr("y", timeY(populationData.reverse()[0].population) + 40)
+            .attr("y", timeY(populationData.reverse()[0].population) + (width < mobileBreakpoint ? 35 : 45))
             .transition()
             .delay(blockTransitionTime)
             .style("opacity", 1.0)

@@ -23,7 +23,7 @@ import App from "./App.svelte";
         text-align: center;
     }
 
-    @media only screen and  (max-width: 900px) {
+    @media only screen and (max-width: 900px) {
         .title-card {
             max-width: 75vw;
             top: 45vh;
@@ -31,6 +31,19 @@ import App from "./App.svelte";
 
         .title-card__content h1 {
             font-size: 2.6rem;
+        }
+    }
+
+    @media only screen and  (max-width: 380px) {
+        .title-card__content h1 {
+            font-size: 2.3rem;
+        }
+    }
+
+    @media only screen and  (max-height: 670px) {
+        .title-card {
+            max-width: 75vw;
+            top: 50vh;
         }
     }
 </style>
