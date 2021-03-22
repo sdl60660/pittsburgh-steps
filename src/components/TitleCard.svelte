@@ -36,7 +36,7 @@ import App from "./App.svelte";
 
     @media only screen and  (max-width: 425px) {
         .title-card__content h1 {
-            font-size: 2.2rem;
+            font-size: 2.1rem;
         }
     }
 
