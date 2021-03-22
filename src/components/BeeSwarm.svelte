@@ -453,15 +453,15 @@
         svg.selectAll(".angle-tip")
             .style("opacity", 0)
             .attr("transform", d => {
-                const translateX = scatterX((d.length * (lineEndLength / d.length)) * 0.9);
-                const translateY = scatterY((heightAccessor(d) * (lineEndLength / d.length)) * 0.9) - 8;
+                const translateX = scatterX((d.length * (lineEndLength / d.length)) * 0.6);
+                const translateY = scatterY((heightAccessor(d) * (lineEndLength / d.length)) * 0.6) - 8;
 
                 const slope = (1.0*heightAccessor(d) / d.length)
                 const rotationAngle =  -1*Math.atan(slope) / Math.PI * 180;
 
                 return `translate(${translateX}, ${translateY}) rotate(${rotationAngle})`;
             })
-            .style("text-anchor", "end")
+            // .style("text-anchor", "end")
             .transition()
             .delay(2000)
             .style("opacity", 1);
