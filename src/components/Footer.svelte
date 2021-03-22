@@ -54,19 +54,31 @@
             <a target="_blank" href="https://twitter.com/sam_learner"><img class="icon-img" src="/images/twitter.svg" alt="twitter link"/></a> |
             <a target="_blank" href="https://github.com/sdl60660"><img class="icon-img" src="/images/github.svg" alt="github link"/></a>
         </p>
-        <p>Code and data for this project lives <a target="_blank" href={githubLink}>here</a>.</p> 
+        <p>
+            Code and data for this project lives <a target="_blank" href={githubLink}>here</a>.
+        </p> 
     </div>
 
     <div class="footer__section">
-        <p><strong>Sources</strong></p>
-        <p>All step data comes from the WPRDC's <a target="_blank" href="https://data.wprdc.org/dataset/city-steps">City Steps dataset</a>, 
-            which in turn depended in part on University of Pittsburgh Professor Bob Regan's data collection efforts. Pittsburgh historical 
-            population numbers come from the U.S. Census.</p>
+        <p>
+            <strong>Sources</strong>
+        </p>
+        <p>
+            All step data comes from the WPRDC's <a target="_blank" href="https://data.wprdc.org/dataset/city-steps">City Steps dataset</a>, 
+            which depended on data collection efforts by University of Pittsburgh Professor Bob Regan, as well as data collected as part of 
+            Pittsburgh's 2017 <a href="https://pittsburghpa.gov/citysteps/">Citywide Steps Assessment</a>. Pittsburgh historical 
+            population numbers come from the U.S. Census.
+        </p>
     </div>
     
     <div class="footer__section">
-        <p><strong>Notes</strong></p>
-        <p>Staircase height is not provided in the dataset and is instead calculated using number of stairs and assuming a standard stair height of 7.5 inches.</p>
+        <p>
+            <strong>Notes</strong>
+        </p>
+        <p>
+            Staircase height is not directly provided in the dataset and is instead calculated using number of stairs 
+            and assuming a standard stair height of 7.5 inches.
+        </p>
     </div>
 
     <p>Last Updated: March 2021</p>
