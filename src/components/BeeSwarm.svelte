@@ -40,7 +40,7 @@
     const totalStepsHeight = stepsData.filter(d => d.number_of_steps > 0).map(d => heightAccessor(d)).reduce((a, b) => a + b, 0);
 
     const sortedGrades = usableChartData.filter(d => d.length > 40 && d.number_of_steps > 4).sort((a, b) => (heightAccessor(b) / +b.length) - (heightAccessor(a) / +a.length))
-    const angleGradeData = [sortedGrades.find(d => d.id === "182210601"), sortedGrades[0]];
+    const angleGradeData = [sortedGrades.find(d => d.id === "182210601"), sortedGrades[0], { number_of_steps: 2, length: 3.378, id: 'canton' }];
     const populationExamples = [populationData[populationData.length-1], populationData.slice().sort((a,b) => b.population - a.population)[0]];
     
     const unsubscribeCoordinates = coordinates.subscribe(coords => {
@@ -152,20 +152,20 @@
                 // .style("fill", d => qualityColorScale(d.overall_score))
                 .style("stroke-width", 0)
                 .style("stroke", "black")
-                .on("mouseover", (e, d) => {
-                    selectedImage = `images/compressed_images/${d.id}.jpg`;
-                    // selectedImage = d.image;
+                // .on("mouseover", (e, d) => {
+                //     selectedImage = `images/compressed_images/${d.id}.jpg`;
+                //     // selectedImage = d.image;
 
-                    tooltipTop = `${e.clientY - 10}px`;
-                    tooltipLeft = `${e.clientX}px`
+                //     tooltipTop = `${e.clientY - 10}px`;
+                //     tooltipLeft = `${e.clientX}px`
 
-                    tooltipVisible = true;
-                    selectedName = d.name;
+                //     tooltipVisible = true;
+                //     selectedName = d.name;
 
-                })
-                .on("mouseout", (e, d) => {
-                    tooltipVisible = false;
-                })
+                // })
+                // .on("mouseout", (e, d) => {
+                //     tooltipVisible = false;
+                // })
         
         svg.append("g")
             .attr("class", "y-axis axis");
@@ -216,7 +216,7 @@
             .attr("class", "angle-tip angle-feature label")
             .attr("fill", "#333")
             .style("text-anchor", "middle")
-            .text(d => `${d3.format(".0%")(1.0*heightAccessor(d) / d.length)} grade`)
+            .text((d, i) => i === 2 ? 'Steepest U.S. Road' : `${d3.format(".0%")(1.0*heightAccessor(d) / d.length)} grade`)
             .style("display", "none")
         
         svg.selectAll(".angle-example")
@@ -375,7 +375,7 @@
         svg.select(".population-label")
             .style("opacity", 0.0)
             .attr("x", timeX(populationData.reverse()[0].year))
-            .attr("y", timeY(populationData.reverse()[0].population) + 50)
+            .attr("y", timeY(populationData.reverse()[0].population) + 40)
             .transition()
             .delay(blockTransitionTime)
             .style("opacity", 1.0)
@@ -453,14 +453,15 @@
         svg.selectAll(".angle-tip")
             .style("opacity", 0)
             .attr("transform", d => {
-                const translateX = scatterX((d.length * (lineEndLength / d.length)) / 2);
-                const translateY = scatterY((heightAccessor(d) * (lineEndLength / d.length))/ 2) - 8;
+                const translateX = scatterX((d.length * (lineEndLength / d.length)) * 0.9);
+                const translateY = scatterY((heightAccessor(d) * (lineEndLength / d.length)) * 0.9) - 8;
 
                 const slope = (1.0*heightAccessor(d) / d.length)
                 const rotationAngle =  -1*Math.atan(slope) / Math.PI * 180;
 
                 return `translate(${translateX}, ${translateY}) rotate(${rotationAngle})`;
             })
+            .style("text-anchor", "end")
             .transition()
             .delay(2000)
             .style("opacity", 1);
@@ -546,11 +547,19 @@
     .tooltip {
         position: absolute;
         top: 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 1rem;
+        font-size: 0.9rem;
+        z-index: 101;
     }
 
     .tooltip img {
         /* max-width: 150px; */
         height: auto;
+    }
+
+    :global(.step-marker) {
+        /* cursor: crosshair; */
     }
 
     :global(.label) {
@@ -573,6 +582,9 @@
                     <image href={`images/compressed_images/${id}.jpg`} id={`${id}-photo`} class={"step-image"} x={0} y={0} width={imageSize} height={imageSize} />
                 </pattern>
             {/each}
+            <pattern patternUnits={"objectBoundingBox"} height={1} width={1} class={"step-image-pattern"} key={'canton'} id={'canton'}>
+                <image href={`images/compressed_images/canton.jpg`} id={`canton-photo`} class={"step-image"} x={0} y={0} width={imageSize} height={imageSize} />
+            </pattern>
         </defs>
     </svg>
     <div bind:this={tooltip} class="tooltip" style="opacity: {tooltipVisible ? 1 : 0}; top: {tooltipTop}; left: {tooltipLeft}; transform: translate(-50%, -100%);">

@@ -4,7 +4,7 @@
 
 <style>
     .footer {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         padding-top: 3rem;
         padding-bottom: 3rem;
         min-height: 10vh;
@@ -17,7 +17,7 @@
     @media screen and (max-width: 900px) {
         .footer {
             min-height: calc(100vh - 6rem);
-            max-width: 75vw;
+            max-width: 80vw;
         }
     }
 
