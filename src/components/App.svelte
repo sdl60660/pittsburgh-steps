@@ -116,7 +116,7 @@
     }
 
     .step.phantom:first-of-type {
-        margin-bottom: 50vh;
+        margin-bottom: 40vh;
     }
 
     .step.phantom {
