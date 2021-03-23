@@ -102,7 +102,7 @@
 
     .step {
         margin: 0 auto 0 auto;
-        height: 100vh;
+        height: 110vh;
         max-width: 0;
     }
 
