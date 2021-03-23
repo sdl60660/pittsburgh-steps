@@ -96,25 +96,18 @@
     article {
         position: relative;
         padding-left: 1rem;
-        max-width: 25rem;
+        max-width: 0;
         margin: 0 10rem 0 0;
-    }
-
-    @media screen and (max-width: 900px) {
-        article {
-            position: relative;
-            padding: 0;
-            max-width: 20rem;
-            margin: 0 auto 0 auto;
-        }
     }
 
     .step {
         margin: 0 auto 0 auto;
         height: 100vh;
+        max-width: 0;
     }
 
     .card {
+        width: 20rem;
         padding: 1rem 1rem;
         background-color: rgba(255,255,255,0.9);
         border-radius: 3px;
@@ -132,8 +125,22 @@
         opacity: 0;
     }
 
+    @media screen and (max-width: 900px) {
+        article {
+            position: relative;
+            padding: 0;
+            max-width: 0rem;
+            margin: 0 auto 0 auto;
+        }
+
+        .card {
+            transform: translateX(-50%);
+        }
+    }
+
     @media screen and (min-width: 900px) {
         .card {
+            width: 25rem;
             border-radius: unset;
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;

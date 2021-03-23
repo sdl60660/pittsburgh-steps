@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import * as d3 from 'd3';
+    import moment from 'moment';
 
     import { coordinates, scroll } from '../state.js';
     import { lineTransition } from '../utils'
@@ -21,9 +22,10 @@
     let tooltip;
     let tooltipTop = 0;
     let tooltipLeft = 0;
+    let tooltipDirection = "north";
     let tooltipVisible = false;
     let selectedImage = "";
-    let selectedName = "";
+    let selectedData = {};
     $: imageSize = width < mobileBreakpoint ? 75 : 125;
     $: blockSize = width < mobileBreakpoint ? 4 : 7;
 
@@ -152,20 +154,26 @@
                 // .style("fill", d => qualityColorScale(d.overall_score))
                 .style("stroke-width", 0)
                 .style("stroke", "black")
-                // .on("mouseover", (e, d) => {
-                //     selectedImage = `images/compressed_images/${d.id}.jpg`;
-                //     // selectedImage = d.image;
+                .on("mouseover", (e, d) => {
+                    // selectedImage = `images/compressed_images/${d.id}.jpg`;
+                    // selectedImage = d.image;
+                    selectedData = {...d};
+                    tooltipTop = `${e.clientY - 10}px`;
+                    tooltipLeft = `${e.clientX}px`;
 
-                //     tooltipTop = `${e.clientY - 10}px`;
-                //     tooltipLeft = `${e.clientX}px`
+                    tooltipDirection = e.clientY < 200 ? "south" : "north";
 
-                //     tooltipVisible = true;
-                //     selectedName = d.name;
-
-                // })
-                // .on("mouseout", (e, d) => {
-                //     tooltipVisible = false;
-                // })
+                    tooltipVisible = true;
+                })
+                .on("mousemove", (e, d) => {
+                    tooltipTop = `${e.clientY - 10}px`;
+                    tooltipLeft = `${e.clientX}px`;
+                })
+                .on("mouseout", (e, d) => {
+                    tooltipTop = `0px`;
+                    tooltipLeft = `0px`;
+                    tooltipVisible = false;
+                })
         
         svg.append("g")
             .attr("class", "y-axis axis");
@@ -282,6 +290,7 @@
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
     $: d3.selectAll(".comparison-image").style("display", scrollIndex === 6 || scrollIndex === 7 ? "block" : "none")
     $: d3.selectAll(".step-image").style("opacity", scrollIndex > 1 ? 1.0 : 0.7);
+    $: d3.selectAll(".step-marker").style("cursor", scrollIndex > 0 && width > mobileBreakpoint ? "crosshair" : "default");
 
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
@@ -549,8 +558,23 @@
         top: 0;
         background-color: rgba(255, 255, 255, 0.9);
         padding: 1rem;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         z-index: 101;
+        border-radius: 3px;
+        font-family: 'Inter';
+    }
+
+    .tooltip-header {
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .tooltip-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        margin-left: 1rem;
+        column-gap: 0.5rem;
+        row-gap: 0.2rem;
     }
 
     .tooltip img {
@@ -564,7 +588,7 @@
 
     :global(.label) {
         font-size: 0.9rem; 
-        font-family: 'Roboto', 'Inter'
+        font-family: 'Inter';
         /* font-family: "Atlas Grotesk Web", sans-serif; */
     }
     @media only screen and (max-width: 900px) {
@@ -587,9 +611,16 @@
             </pattern>
         </defs>
     </svg>
-    <div bind:this={tooltip} class="tooltip" style="opacity: {tooltipVisible ? 1 : 0}; top: {tooltipTop}; left: {tooltipLeft}; transform: translate(-50%, -100%);">
+    <div bind:this={tooltip} class="tooltip" style="display: {tooltipVisible && width > mobileBreakpoint && scrollIndex > 0 ? "block" : "none"}; top: {tooltipTop}; left: {tooltipLeft}; transform: translate(-50%, {tooltipDirection === "north" ? "-100%" : "15%"});">
         <!-- <img width={150} src={selectedImage} alt={selectedName}> -->
-        <!-- <p>{selectedName}</p> -->
+        <div class="tooltip-header"><strong>{selectedData.name}</strong></div>
+        <div class="tooltip-grid">
+            <div>Constructed:</div><div>{selectedData.year_built || "-"}</div>
+            <div>Steps:</div><div>{selectedData.number_of_steps > 0 ? selectedData.number_of_steps : "-"}</div>
+            <div>Length:</div><div>{selectedData.length || "-"}{selectedData.length ? " feet" : ""}</div>
+            <div>Material:</div><div>{selectedData.material || "-"}</div>
+            <div>Neighborhood:</div><div>{selectedData.neighborhood || "-"}</div>
+        </div>
     </div>
 </figure>
 
