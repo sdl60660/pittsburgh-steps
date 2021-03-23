@@ -59,6 +59,7 @@
                 step: ".step",
                 offset: 1.0,
                 progress: false,
+                order: false
                 // threshold: 4
             })
             .onStepProgress(({ element, index, progress }) => {
@@ -138,7 +139,7 @@
         }
 
         .step.phantom:first-of-type {
-            margin-bottom: 70vh;
+            margin-bottom: 75vh;
         }
     }
 

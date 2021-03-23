@@ -58,7 +58,7 @@
         scrollDirection = direction;
     })
 
-    $: line = d3.line()
+    const line = d3.line()
         .defined(d => !isNaN(d.population))
         .x(d => timeX(d.year))
         .y(d => timeY(d.population))
@@ -290,7 +290,7 @@
     $: d3.selectAll(".angle-feature").style("display", scrollIndex === 5 ? "block" : "none");
     $: d3.selectAll(".comparison-image").style("display", scrollIndex === 6 || scrollIndex === 7 ? "block" : "none")
     $: d3.selectAll(".step-image").style("opacity", scrollIndex > 1 ? 1.0 : 0.7);
-    $: d3.selectAll(".step-marker").style("cursor", scrollIndex > 0 && width > mobileBreakpoint ? "crosshair" : "default");
+    // $: d3.selectAll(".step-marker").style("cursor", scrollIndex > 0 && width > mobileBreakpoint ? "crosshair" : "default");
 
     $: if (scrollIndex === 0) {
         const svg = d3.select(viz);
@@ -302,6 +302,7 @@
             .attr("height", imageSize)
 
         svg.selectAll(".step-marker")
+            .style("cursor", "default")
             .transition()
             .duration(scrollDirection === "up" ? 1000 : 0)
             .attr("width", imageSize)
@@ -326,6 +327,7 @@
 
         svg.selectAll(".step-marker")
             .style("display", "block")
+            .style("cursor", "crosshair")
             .transition()
             .ease(d3.easeCubicOut)
             .duration((d, i) => {
@@ -357,6 +359,7 @@
         svg.selectAll(".step-marker")
             .style("display", d => d.year_built !== "" ? "block" : "none")
             .style("opacity", d => d.year_built !== "" ? 0.7 : 0.0)
+            .style("cursor", "crosshair")
             .transition()
                 .duration(blockTransitionTime)
                 .attr("rx", 0)
@@ -407,6 +410,7 @@
         const blockTransitionTime = 1000;
 
         svg.selectAll(".step-marker")
+            .style("cursor", "crosshair")
             .style("display", d => d.number_of_steps !== "" && d.length !== "0" && d.length !== "" ? "block" : "none")
             .attr("rx", 0)
             .attr("ry", 0)
