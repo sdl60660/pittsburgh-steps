@@ -136,6 +136,10 @@
         .card {
             transform: translateX(-50%);
         }
+
+        .step.phantom:first-of-type {
+            margin-bottom: 70vh;
+        }
     }
 
     @media screen and (min-width: 900px) {
