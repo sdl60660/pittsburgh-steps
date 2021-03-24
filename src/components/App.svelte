@@ -102,8 +102,8 @@
     }
 
     .step {
-        margin: 0 auto 0 auto;
-        height: 110vh;
+        margin: 0 auto 10vh auto;
+        height: 100vh;
         max-width: 0;
     }
 
