@@ -1,5 +1,15 @@
 <script>
+    import { scroll } from '../state.js';
 
+    const mobileBreakpoint = 900;
+    let width = 700;
+    let scrollIndex = 0;
+
+    const unsubscribeScroll = scroll.subscribe(({ index }) => {
+        scrollIndex = index;
+        console.log(scrollIndex);
+    })
+    
 </script>
 
 <style>
@@ -7,39 +17,44 @@
         height: 6vh;
         max-height: 4rem;
 	    min-height: 3rem;
-        width: 100%;
-        position: absolute;
-        z-index: 100;
-        background-color: rgba(224, 224, 224, 0.8);
+        width: 12rem;
+        position: fixed;
+        z-index: 2;
+        /* background-color: rgba(224, 224, 224, 0.8); */
         display: flex;
     }
 
     .header__main-site-link {
-        align-self: center;
-        margin-right: 3vw;
-        position: absolute;
-        right: 0vw;
+        /* align-self: center; */
+        margin: auto;
+        padding: 1rem;
+        text-align: center;
+        /* position: absolute; */
+        /* right: 0vw; */
+        
     }
 
-    .header__main-site-link button {
-        background-color: rgba(48, 112, 196, 0.8);
-        color: white;
-        padding: 0.4rem 0.6rem;
-        border-radius: 3px;
-        font-size: 0.9rem;
-        text-decoration: none;
-        border-color: rgb(133, 133, 133);
-        border-bottom-color: rgb(83, 83, 83);
-        border-right-color: rgb(83, 83, 83);
-        border-width: 2px;
-        font: 400 13.3333px Arial;
+    .header__main-site-link a {
+        text-decoration-color: #333;
     }
+
+    .header__main-site-link span {
+        font-family: 'Montserrat';
+        color: #333 !important;
+        font-weight: 700;
+        font-size: 1.5rem;
+        -webkit-text-stroke-width: 0.8px;
+        -webkit-text-stroke-color: white;   
+    }
+
 </style>
 
-<div class="header">
+<svelte:window bind:innerWidth={width}/>
+
+<div class="header" style="display: {(width > mobileBreakpoint && scrollIndex < 7 && scrollIndex > 0) ? 'block' : 'none'}">
     <div class={"header__main-site-link"}>
-        <a href="https://bit.ly/main-project-site">
-            <button>More Projects</button>
+        <a href="https://bit.ly/main-project-site" target="_blank">
+            <span>Main Site</span>
         </a>
     </div>
 </div>

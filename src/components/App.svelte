@@ -99,6 +99,7 @@
         padding-left: 1rem;
         max-width: 0;
         margin: 0 10rem 0 0;
+        z-index: 10;
     }
 
     .step {
@@ -184,7 +185,7 @@
 
 <svelte:window on:resize={() => { scroller.resize() } }/>
 
-<!-- <Header /> -->
+<Header />
 {#await dataLoad}
     <div />
 {:then data}
