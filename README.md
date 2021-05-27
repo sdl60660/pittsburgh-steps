@@ -8,4 +8,4 @@ Built using:
 * Svelte as a front-end framework
 * D3/Mapbox for visualization/mapping
 * Python for minimal data processing
-* Vercel for hosting
+* Vercel for hosting 
