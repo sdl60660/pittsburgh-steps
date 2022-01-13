@@ -185,7 +185,7 @@
 
 <svelte:window on:resize={() => { scroller.resize() } }/>
 
-<Header />
+<!-- <Header /> -->
 {#await dataLoad}
     <div />
 {:then data}
